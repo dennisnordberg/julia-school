@@ -1,0 +1,198 @@
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+a,
+div,
+span,
+blockquote,
+figure,
+img,
+svg,
+ul,
+pre,
+form,
+input,
+label {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+
+h1,
+label,
+label a {
+  font-size: 54px;
+  margin: 18px 0 9px; }
+
+h2,
+h2 a {
+  font-size: 36px; }
+
+h3,
+aside h2 {
+  font-size: 27px; }
+
+p,
+a,
+div,
+span,
+blockquote,
+ul,
+code,
+pre,
+input,
+button {
+  font-size: 18px; }
+
+body,
+a {
+  color: #fff;
+  background-color: #202020; }
+
+#overflow {
+  overflow-x: hidden; }
+
+#wrapper {
+  margin: 0 144px 72px;
+  max-width: 700px; }
+
+header {
+  margin: 0 -500%;
+  padding: 0 500%; }
+
+p svg,
+li svg {
+  margin-left: 9px; }
+
+#logo,
+footer {
+  margin-top: 54px; }
+
+a:visited {
+  color: #ccc; }
+
+a:hover {
+  color: #ffffe0; }
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block; }
+
+p,
+li,
+#byline,
+pre {
+  line-height: 1.5;
+  margin-bottom: 18px; }
+
+li {
+  margin-left: 18px; }
+
+aside {
+  border: 9px solid #ffffe0;
+  padding: 36px 36px 18px;
+  margin-bottom: 18px; }
+
+#toc h2 {
+  margin-bottom: 18px; }
+
+ul ul li {
+  margin-bottom: 0; }
+
+#summary,
+.li {
+  margin-bottom: 27px; }
+
+#byline {
+  text-transform: uppercase; }
+
+code {
+  color: #ffffe0;
+  background-color: #000;
+  border-radius: 6px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 3px 6px; }
+
+pre {
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+  overflow: auto; }
+
+blockquote {
+  border-left: 9px solid #ffffe0;
+  padding-left: 18px; }
+
+label {
+  font-weight: bold;
+  display: block; }
+
+input,
+button {
+  box-sizing: border-box;
+  margin: 18px 0 0;
+  height: 36px;
+  border: 1px #ffffe0 solid;
+  outline: none;
+  display: inline-block;
+  box-sizing: border-box;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px; }
+
+input {
+  color: #202020;
+  background-color: #ffffe0;
+  padding: 0 9px;
+  width: 290px;
+  vertical-align: top; }
+
+::placeholder {
+  color: #202020;
+  font-style: italic; }
+
+button {
+  color: #ffffe0;
+  background-color: #202020;
+  padding: 0 18px;
+  transition: all 0.6s ease-in-out 0s; }
+
+button:hover {
+  color: #202020;
+  background-color: #ffffe0;
+  cursor: pointer; }
+
+@media (max-width: 900px) {
+  #wrapper {
+    margin: 0 18px 36px; }
+  h1,
+  label {
+    font-size: 36px;
+    margin-top: 9px; }
+  h2,
+  h2 a {
+    font-size: 27px; }
+  h3 {
+    font-size: 18px; }
+  h2,
+  h3 {
+    margin-top: 18px; }
+  aside h3,
+  #toc h2 {
+    margin-top: 0; }
+  #TableOfContents li {
+    margin-top: 18px; }
+  #logo,
+  footer {
+    margin: 27px 0 9px; }
+  input {
+    width: 100%;
+    margin-bottom: 9px; }
+  button {
+    width: 100%;
+    margin: 0 0 9px; } }

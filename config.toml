@@ -1,3 +1,24 @@
 baseURL = "https://julia.school"
 languageCode = "en-au"
 title = "Julia School"
+theme = "moonbooth"
+[taxonomies]
+[params]
+    blogSection = "julia"
+	blogTitle = "Julia Tutorials"
+	rssTitle = "Julia Tutorials | julia.school"
+	seoTitle = "Julia tutorials for web scraping and dataframe pivots"
+	description = "Here's how I've used Julia at an ASX-listed company."
+	color = "#8CF67B"
+    custom_css = ['css/custom.css']
+[markup]
+	[markup.goldmark.renderer]
+		unsafe = true
+	[markup.tableOfContents]
+		endLevel = 4
+		ordered = false
+		startLevel = 2
+	[markup.highlight]
+		tabWidth = 2
+[minify]
+	disableSVG = true
