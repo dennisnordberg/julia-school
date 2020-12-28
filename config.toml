@@ -10,7 +10,6 @@ theme = "moonbooth"
 	seoTitle = "Julia tutorials for web scraping and dataframe pivots"
 	description = "Here's how I've used Julia at an ASX-listed company."
 	color = "#8CF67B"
-    custom_css = ['css/custom.css']
 [markup]
 	[markup.goldmark.renderer]
 		unsafe = true
