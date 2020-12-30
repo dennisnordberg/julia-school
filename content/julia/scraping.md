@@ -41,7 +41,7 @@ OK, once you have Julia installed, fire up your terminal of choice, and enter th
 
 You should see the green Julia command prompt:
 
-<code class="julia">julia></code>
+`julia`
 
 Now it's time to add the packages.
 
@@ -63,7 +63,7 @@ Hit Enter and let Julia do its thing.
 
 Once the packages have been installed, you can exit out of Julia's package manager by pressing Delete / Backspace. You'll then see the green prompt again:
 
-<code class="julia">julia></code>
+`julia`
 
 ### "Using" the packages
 
@@ -344,7 +344,7 @@ There are many other status codes; these are just three examples.
 
 If you haven't already done so, you need to tell Julia that you'll be `using` the `HTTP` package (you won't need the `Gumbo` package to get the status codes).
 
-To do so, at the green <code class="julia">julia></code> prompt, enter the following command:
+To do so, at the green `julia` prompt, enter the following command:
 
 `using HTTP`
 

@@ -36,7 +36,7 @@ If you want to play along (as opposed to just reading through this tutorial), yo
 
 Once you have Julia up and running, you'll see this prompt:
 
-<code class="julia">julia></code>
+`julia`
 
 This prompt will be green in color. Yeah, like in _The Matrix_.
 
@@ -48,14 +48,14 @@ The first dataframes-specific thing we need to is to install the DataFrames pack
 
 The easiest way to do this is to type the `]` (right square bracket, located above the return/Enter key on your keyboard) into the Julia terminal.
 
-This changes the <code class="julia">julia></code> prompt we saw above into one that says:
+This changes the `julia` prompt we saw above into one that says:
 
 <code class="julia-pkg">pkg></code>
 
 This prompt will be blue in colour.
 
 This means we are now in Julia's package manager (hence the abbreviation <code class="julia-pkg">pkg</code>
-). We can install packages with a lot less typing in here (compared to at the green <code class="julia">julia></code> prompt).
+). We can install packages with a lot less typing in here (compared to at the green `julia` prompt).
 
 Go ahead and add the DataFrames package by typing in the line below and hitting return/Enter:
 
@@ -71,7 +71,7 @@ To exit the package manager area, and to go back to the main Julia area, simply 
 
 You'll now see the Julia prompt again:
 
-<code class="julia">julia></code>
+`julia`
 
 Now we can actually create our NASA inventory dataframe.
 
@@ -200,7 +200,7 @@ Alright, so you've typed or copied and pasted the code above into Julia and hit 
 
 But now all we see is the Julia prompt again:
 
-<code class="julia">julia></code>
+`julia`
 
 What gives? Well, if you type in `inventory` and hit the return/Enter key, you'll see that the planets in our `description` column now start with a capital letter.
 

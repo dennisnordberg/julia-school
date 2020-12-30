@@ -85,9 +85,6 @@ pre {
   line-height: 1.5;
   margin-bottom: 18px; }
 
-li {
-  margin-left: 18px; }
-
 aside {
   border: 9px solid #8CF67B;
   padding: 36px 36px 18px;
@@ -102,9 +99,6 @@ ul ul li {
 #summary,
 .li {
   margin-bottom: 27px; }
-
-#byline {
-  text-transform: uppercase; }
 
 code {
   color: #8CF67B;
@@ -193,8 +187,11 @@ button:hover {
     width: 100%;
     margin: 0 0 9px; } }
 
-.julia {
-  color: #8CF67B; }
-
 .julia-pkg {
   color: #6874F6; }
+
+#byline {
+  text-transform: uppercase; }
+
+li > ul > li {
+  margin-left: 18px; }

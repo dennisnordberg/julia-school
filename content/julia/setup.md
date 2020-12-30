@@ -26,14 +26,19 @@ OK, the Julia app has launched. It's actually a Terminal instance with Julia alr
 
 The prompt looks like this:
 
-<code class="julia">julia></code>
+`julia>`
 
 You can enter your first mathematical operation:
 
-<code class="julia">julia></code> `1 + 1`
-
-`2`
+```
+julia> 1 + 1
+2
+```
 
 ... and you've entered the world of Julia!
+
+## Using Julia with a third-party CLI such as iTerm
+
+Alternatively, if you'd rather use a different CLI (such as my preference, iTerm), you can simply open that and enter the command `julia`. You'll see a Julia prompt and away you go!
 
 Here are more [Julia tutorials](../) so you can see what you can do with this [truly powerful language](../why/).

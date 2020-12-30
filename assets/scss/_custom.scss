@@ -1,7 +1,11 @@
-.julia {
-    color: #8CF67B;
-}
-
 .julia-pkg {
     color: #6874F6;
+}
+
+#byline {
+    text-transform: uppercase;
+}
+
+li > ul > li {
+    margin-left: $x * 2;
 }
