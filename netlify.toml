@@ -3,7 +3,7 @@
 
 [build]
 	publish = "public"
-	command = "hugo --gc --minify --buildFuture"
+	command = "hugo --minify --buildFuture"
 
 [[redirects]]
 	from = "/*"
