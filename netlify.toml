@@ -1,0 +1,16 @@
+[context.production.environment]
+	HUGO_VERSION = "0.79.1"
+
+[build]
+	publish = "public"
+	command = "hugo --gc --minify --buildFuture"
+
+[[redirects]]
+	from = "/*"
+	to = "/404/"
+	status = 404
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+	Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
