@@ -1,3 +1,3 @@
-[submodule "themes/moonbooth-seo-theme"]
-	path = themes/moonbooth-seo-theme
+[submodule "themes"]
+	path = themes
 	url = https://github.com/moonbooth/seo-theme-hugo
