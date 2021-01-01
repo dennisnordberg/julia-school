@@ -2,6 +2,7 @@ baseURL = "https://julia.school/"
 languageCode = "en-au"
 title = "Julia School"
 theme = "moonbooth-seo-theme"
+enableRobotsTXT = true
 [taxonomies]
 [params]
     blogSection = "julia"
