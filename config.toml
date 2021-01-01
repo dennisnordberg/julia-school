@@ -1,4 +1,4 @@
-baseURL = "https://julia.school"
+baseURL = "https://julia.school/"
 languageCode = "en-au"
 title = "Julia School"
 theme = "moonbooth-seo-theme"
@@ -6,10 +6,10 @@ theme = "moonbooth-seo-theme"
 [params]
     blogSection = "julia"
 	blogTitle = "Julia Tutorials"
+	color = "#8CF67B"
+	description = "Here's how I've used Julia in my SEO role at a big Australian tech company."
 	rssTitle = "Julia Tutorials | julia.school"
 	seoTitle = "Julia tutorials for web scraping and dataframe pivots"
-	description = "Here's how I've used Julia at an ASX-listed company."
-	color = "#8CF67B"
 [markup]
 	[markup.goldmark.renderer]
 		unsafe = true
