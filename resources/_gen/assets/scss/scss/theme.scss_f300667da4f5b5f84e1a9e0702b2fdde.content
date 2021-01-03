@@ -1,3 +1,10 @@
+/* Don't edit this file in the `/themes/` folder
+Instead, create a folder in _your_ repo at `/assets/scss` (if it doesn't exist already)
+and paste a duplicate of this file there
+_Then_ you can edit it
+Otherwise it could be overwritten if you pull theme updates
+You can (and should) delete this comment in _your_ version of this file
+to avoid future confusion */
 html,
 body,
 h1,
@@ -31,9 +38,8 @@ h2,
 h2 a {
   font-size: 36px; }
 
-h3,
-aside h2 {
-  font-size: 27px; }
+h3 {
+  font-size: 18px; }
 
 p,
 a,

@@ -42,8 +42,8 @@ I wrote more about [why Julia is a great programming language for data analysis 
 
 I created this website because I'd love to see the Julia ecosystem grow even further ([it's already being used at top companies you've heard of](../julia/why/#who-uses-julia)).
 
-Good luck, and please feel free to reach out with any questions, tutorial requests, or just to say hi. I'm on [LinkedIn](https://www.linkedin.com/in/ronerdos/) and [Twitter](https://twitter.com/RonErdos).
+Good luck, and please feel free to reach out with any questions, tutorial requests, or just to say hi. I'm on [LinkedIn](https://www.linkedin.com/in/ronerdos/), [Twitter](https://twitter.com/RonErdos), and on email: [my firstname] at [my lastname] dot com dot au.
 
 Cheers,
 
-Ron
+Ron Erdos
