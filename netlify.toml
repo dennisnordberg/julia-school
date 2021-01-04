@@ -9,7 +9,6 @@
 	from = "/index.xml"
 	to = "/julia/index.xml"
 	force = true
-	status = 301
 
 [[redirects]]
 	from = "/*"
