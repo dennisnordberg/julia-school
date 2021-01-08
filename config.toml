@@ -8,6 +8,7 @@ enableRobotsTXT = true
     blogSection = "julia"
 	blogTitle = "Julia Tutorials"
 	color = "#8CF67B"
+	dateMarkedUpdated = true
 	description = "Here's how I've used Julia in my SEO role at a big Australian tech company."
 	rssTitle = "Julia Tutorials | julia.school"
 	seoTitle = "Julia tutorials for web scraping and dataframe pivots"
