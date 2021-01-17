@@ -31,15 +31,15 @@ label {
 h1,
 label,
 label a {
-  font-size: 54px;
-  margin: 18px 0 9px; }
+  font-size: 60px;
+  margin: 20px 0 10px; }
 
 h2,
 h2 a {
-  font-size: 36px; }
+  font-size: 40px; }
 
 h3 {
-  font-size: 22.5px; }
+  font-size: 25px; }
 
 p,
 a,
@@ -51,7 +51,7 @@ code,
 pre,
 input,
 button {
-  font-size: 18px; }
+  font-size: 20px; }
 
 body,
 a {
@@ -62,7 +62,7 @@ a {
   overflow-x: hidden; }
 
 #wrapper {
-  margin: 0 162px 54px;
+  margin: 0 180px 60px;
   max-width: 700px; }
 
 header {
@@ -71,7 +71,7 @@ header {
 
 #logo,
 footer {
-  margin-top: 54px; }
+  margin-top: 60px; }
 
 a:visited {
   color: #ccc; }
@@ -89,12 +89,12 @@ li,
 #byline,
 pre {
   line-height: 1.5;
-  margin-bottom: 18px; }
+  margin-bottom: 20px; }
 
 aside {
-  border: 9px solid #8CF67B;
-  padding: 36px 36px 18px;
-  margin-bottom: 18px; }
+  border: 10px solid #8CF67B;
+  padding: 40px 40px 20px;
+  margin-bottom: 20px; }
 
 table,
 td,
@@ -103,23 +103,23 @@ th {
 
 th,
 td {
-  padding: 9px; }
+  padding: 10px; }
 
 table {
   border-collapse: collapse;
   width: 100%;
-  margin-bottom: 9px;
+  margin-bottom: 10px;
   text-align: left; }
 
 #toc h2 {
-  margin-bottom: 18px; }
+  margin-bottom: 20px; }
 
 ul ul li {
   margin-bottom: 0; }
 
 #summary,
 .li {
-  margin-bottom: 27px; }
+  margin-bottom: 30px; }
 
 code {
   color: #8CF67B;
@@ -135,8 +135,8 @@ pre {
   overflow: auto; }
 
 blockquote {
-  border-left: 9px solid #8CF67B;
-  padding-left: 18px; }
+  border-left: 10px solid #8CF67B;
+  padding-left: 20px; }
 
 label {
   font-weight: bold;
@@ -145,20 +145,20 @@ label {
 input,
 button {
   box-sizing: border-box;
-  margin: 18px 0 0;
-  height: 36px;
+  margin: 20px 0 0;
+  height: 40px;
   border: 1px #8CF67B solid;
   outline: none;
   display: inline-block;
   box-sizing: border-box;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 9px; }
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px; }
 
 input {
   color: #202020;
   background-color: #8CF67B;
-  padding: 0 9px;
+  padding: 0 10px;
   width: 290px;
   vertical-align: top; }
 
@@ -169,7 +169,7 @@ input {
 button {
   color: #8CF67B;
   background-color: #202020;
-  padding: 0 18px;
+  padding: 0 20px;
   transition: all 0.6s ease-in-out 0s; }
 
 button:hover {
@@ -179,33 +179,33 @@ button:hover {
 
 @media (max-width: 900px) {
   #wrapper {
-    margin: 0 18px 36px; }
+    margin: 0 20px 40px; }
   h1,
   label {
-    font-size: 36px;
-    margin-top: 9px; }
+    font-size: 40px;
+    margin-top: 10px; }
   h2,
   h2 a {
-    font-size: 27px; }
+    font-size: 30px; }
   h3 {
-    font-size: 18px; }
+    font-size: 20px; }
   h2,
   h3 {
-    margin-top: 18px; }
+    margin-top: 20px; }
   aside h3,
   #toc h2 {
     margin-top: 0; }
   #TableOfContents li {
-    margin-top: 18px; }
+    margin-top: 20px; }
   #logo,
   footer {
-    margin: 27px 0 9px; }
+    margin: 30px 0 10px; }
   input {
     width: 100%;
-    margin-bottom: 9px; }
+    margin-bottom: 10px; }
   button {
     width: 100%;
-    margin: 0 0 9px; } }
+    margin: 0 0 10px; } }
 
 .julia-pkg {
   color: #6874F6; }
@@ -214,4 +214,4 @@ button:hover {
   text-transform: uppercase; }
 
 li > ul > li {
-  margin-left: 18px; }
+  margin-left: 20px; }

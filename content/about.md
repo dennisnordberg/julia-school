@@ -2,7 +2,7 @@
 title: About
 seotitle: About
 description: About this site
-layout: page
+layout: page-with-subscribe-form
 ---
 
 Hey, I'm Ron Erdos. Part and parcel of being an SEO (search engine optimiser) at leading Australian tech companies means I need to wrangle decent-sized datasets.
@@ -23,7 +23,6 @@ nums = [1,2,3,4,5]
 nums[2:3]
 [3]
 ```
-
 
 Now look at the same example in Julia:
 
