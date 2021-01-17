@@ -39,7 +39,7 @@ h2 a {
   font-size: 36px; }
 
 h3 {
-  font-size: 18px; }
+  font-size: 22.5px; }
 
 p,
 a,
@@ -62,7 +62,7 @@ a {
   overflow-x: hidden; }
 
 #wrapper {
-  margin: 0 144px 72px;
+  margin: 0 162px 54px;
   max-width: 700px; }
 
 header {
@@ -96,6 +96,21 @@ aside {
   padding: 36px 36px 18px;
   margin-bottom: 18px; }
 
+table,
+td,
+th {
+  border: 1px solid #8CF67B; }
+
+th,
+td {
+  padding: 9px; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 9px;
+  text-align: left; }
+
 #toc h2 {
   margin-bottom: 18px; }
 
@@ -111,8 +126,7 @@ code {
   background-color: #000;
   border-radius: 6px;
   font-weight: bold;
-  display: inline-block;
-  padding: 3px 6px; }
+  display: inline-block; }
 
 pre {
   -moz-tab-size: 2;
