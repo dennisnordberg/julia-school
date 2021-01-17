@@ -35,6 +35,8 @@ We get:
  10
  ```
 
+ (Yes, I specially designed this website so the above would look like _The Matrix_.)
+
 If we want to count by anything other than 1, we can put the increment size between our start and end numbers. For example, if we want an array with the numbers from 5 to 15, counting by 2, we do this:
 
 `collect(5:2:15)`
@@ -55,7 +57,7 @@ We get:
 
 Since Pluto is now officially a "dwarf planet" rather than a regular planet, perhaps it shouldn't be in the `planets` array above.
 
-We can remove it in a few different ways.
+We can remove elements from Julia arrays in a few different ways.
 
 ### How to use the "pop!" function to remove the last item from a Julia array
 

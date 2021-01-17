@@ -55,7 +55,7 @@ button {
 
 body,
 a {
-  color: #fff;
+  color: white;
   background-color: #202020; }
 
 #overflow {
@@ -93,6 +93,7 @@ pre {
 
 aside {
   border: 10px solid #8CF67B;
+  border-radius: 25px;
   padding: 40px 40px 20px;
   margin-bottom: 20px; }
 
@@ -123,8 +124,6 @@ ul ul li {
 
 code {
   color: #8CF67B;
-  background-color: #000;
-  border-radius: 6px;
   font-weight: bold;
   display: inline-block; }
 

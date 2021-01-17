@@ -5,7 +5,9 @@ description: About this site
 layout: page-with-subscribe-form
 ---
 
-Hey, I'm Ron Erdos. Part and parcel of being an SEO (search engine optimiser) at leading Australian tech companies means I need to wrangle decent-sized datasets.
+Hey, I'm Ron Erdos.
+
+Part and parcel of being an SEO (search engine optimiser) at leading Australian tech companies means I need to wrangle decent-sized datasets.
 
 Sometimes I need to pivot data, but I dislike doing this in Excel as the pivot table it gives you is not very customisable. [Pivoting data in Julia](../julia/dataframes/#how-to-use-pivot-tables-in-julia-dataframes) is just more fun.
 

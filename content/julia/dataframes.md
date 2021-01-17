@@ -147,7 +147,7 @@ The first words of the output above, `4x3 DataFrame` says that we have a 4-row, 
 
 Next, we have the column headers, `Row`, `item`, `quantity`, and `description`.
 
-The first of these, `Row`, is not something we asked for, though it is very useful. No, Julia generates the row numbers column automatically. But don't worry, they're not part of the dataframe proper, nor will they show up in CSV exports and so forth.
+The first of these, `Row`, is not something we asked for, though it is very useful. It's a column of row numbers that Julia generates automatically. But don't worry, they're not part of the dataframe proper, nor will they show up in CSV exports and so forth.
 
 The next column headers, `item`, `quantity`, and `description` are those we supplied to Julia in our code above.
 
@@ -155,7 +155,7 @@ The next column headers, `item`, `quantity`, and `description` are those we supp
 
 ### Julia variable naming conventions
 
-When it comes to naming variables in Julia, I follow convention and keep them all lowercase. Multiple words in variables are separated with an underscore, like this: `my_new_column`. This is known as "snake case".
+When it comes to naming variables in Julia, I follow convention and keep them all lowercase. For variable names with multiple words (e.g. `my_new_column`), I use "snake case": all lowercase, with underscores separating the words.
 
 </aside>
 
@@ -165,11 +165,11 @@ We see `String`, `Int64`, and another `String`.
 
 The `Row` column doesn't have a type because, as mentioned above, it's not part of the dataframe proper. It's just there to help you keep track.
 
-Anyway, so our first column, `item`, has the **type** `String`.
+Our first "real" column, `item`, has the **type** `String`.
 
 This means that anything that goes in this column will be treated as text.
 
-The middle column, `quantity`, has the type `Int64`. Although this might look weird, it just means "integer" (a whole number, not a decimal). The `64` just refers to 64 bit, which means huge numbers can be stored here.
+The next column, `quantity`, has the type `Int64`. Although this might look weird, it just means "integer" (a whole number, not a decimal). The `64` just refers to 64 bit, which means huge numbers can be stored here. "Huge numbers" is my technical term for the range of integers between `-2^63` and `2^63 - 1`.
 
 Finally, the last column, `description`, is another `String`-type column, the same as the `item` column.
 
