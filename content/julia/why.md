@@ -1,11 +1,10 @@
 ---
 title: Why Julia? It's fast and easy
 date: 2020-02-16 11:00:00+11:00
-seotitle: Why Julia?
+seoTitle: Why Julia?
 description: If you're going to learn a coding language for data science, Julia is the one. Here's why.
-img: ""
 authors: ["Ron Erdos"]
-contentformat: article
+tableOfContents: false
 ---
 
 ## We don't have to pick between fast and easy anymore: Julia is both

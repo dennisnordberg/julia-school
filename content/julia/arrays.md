@@ -1,10 +1,10 @@
 ---
 title: How to use Julia arrays
 date: 2020-09-15 11:55:09+11:00
-seotitle: "Julia arrays: How to add, delete, and replace items"
+seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, replace items in arrays in Julia.
 authors: ["Ron Erdos"]
-contentformat: tutorial
+tableOfContents: true
 ---
 
 ## What is an array in the Julia language?

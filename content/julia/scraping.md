@@ -1,10 +1,10 @@
 ---
 title: Scraping web pages with Julia and the HTTP and Gumbo packages
 date: 2020-08-05 12:31:32+11:00
-seotitle: "Scraping web pages with Julia HTTP & Gumbo: Tutorial"
+seoTitle: "Scraping web pages with Julia HTTP & Gumbo: Tutorial"
 description: Julia can be used for fast web scraping, not just data analysis.
 authors: ["Ron Erdos"]
-contentformat: tutorial
+tableOfContents: true
 version: 1.4.2
 ---
 

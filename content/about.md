@@ -1,6 +1,6 @@
 ---
 title: About
-seotitle: About
+seoTitle: About
 description: About this site
 layout: page-with-subscribe-form
 ---

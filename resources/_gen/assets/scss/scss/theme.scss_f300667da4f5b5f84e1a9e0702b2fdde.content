@@ -115,12 +115,8 @@ table {
 #toc h2 {
   margin-bottom: 20px; }
 
-ul ul li {
-  margin-bottom: 0; }
-
-#summary,
-.li {
-  margin-bottom: 30px; }
+#description {
+  font-style: italic; }
 
 code {
   color: #8CF67B;

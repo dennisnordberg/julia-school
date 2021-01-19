@@ -1,11 +1,10 @@
 ---
 title: How to download, install and run Julia on a Mac
 date: 2020-02-20 11:00:00+11:00
-seotitle: How to download and install Julia on a Mac
+seoTitle: How to download and install Julia on a Mac
 description: It's WAY easier than installing Python. You can install Julia like any other Mac app. You can even use a Homebrew Cask.
-img: ""
 authors: ["Ron Erdos"]
-contentformat: tutorial
+tableOfContents: true
 ---
 
 ## How to download Julia for Mac

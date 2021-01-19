@@ -1,11 +1,10 @@
 ---
 title: How to use dataframes in Julia
 date: 2020-03-01 11:00:00+11:00
-seotitle: Julia dataframes tutorial
+seoTitle: Julia dataframes tutorial
 description: "Julia dataframes let you do anything you want: pivot tables, data cleaning, table joins, filtering, and more, all with a nice clean syntax."
-img: ""
 authors: ["Ron Erdos"]
-contentformat: tutorial
+tableOfContents: true
 version: 1.3.1
 ---
 
