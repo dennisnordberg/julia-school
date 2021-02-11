@@ -1,6 +1,6 @@
 ---
 title: Why Julia? It's fast and easy
-date: 2020-02-16 11:00:00+11:00
+date: 2021-02-11 11:00:00+11:00
 seoTitle: Why Julia?
 description: If you're going to learn a coding language for data science, Julia is the one. Here's why.
 authors: ["Ron Erdos"]
@@ -49,6 +49,12 @@ While we're quoting MIT academics, here's [Professor Mark Vogelsberger, a theore
 
 > ... Julia code is ... more than 100 times faster than the equivalent Python code. Multiple dispatch with function calls gives Julia extremely efficient code that is practically superior to any high-level language. Faster code in Julia can be achieved without any tricks like vectorization or outsourcing to C extensions. By contrast, such tricks are often necessary to speed up Python or R code.
 
+## The machine learning climate model that wouldn't exist without Julia
+
+MIT oceanographer Dr. Ferrari (yes, that's his real name, and yes I am jealous of his name, even though my maths teachers used to ask me if I was related to Paul Erdos) on [building a "disruptive" machine learning climate model backed by former Google CEO Eric Schmidt](https://www.csmonitor.com/Environment/2021/0122/Meet-the-team-shaking-up-climate-models):
+
+> There was no way we could have done it with another language ... after three or four months, we realized there was no way we could go back.
+
 ## Python slices drive me nuts
 
 Look at this Python code:
@@ -82,9 +88,9 @@ Python: One is zero, two is one, and seven is actually seven if it's the end of 
 
 From the [official Julia website](https://julialang.org/):
 
-> Julia has been downloaded over 13 million times and the Julia community has registered over 2,800 Julia packages for community use.
+> Julia has been downloaded over 17 million times and the Julia community has registered over 4,000 Julia packages for community use.
 
-Now, some of those 13 million downloads will be people kicking the tyres and then never using it again. Fair enough.
+Now, some of those 17 million downloads will be people kicking the tyres and then never using it again. Fair enough.
 
 However, a lot of those downloads are in use at major league companies, including:
 
