@@ -55,6 +55,19 @@ MIT oceanographer Dr. Ferrari (yes, that's his real name, and yes I am jealous o
 
 > There was no way we could have done it with another language ... after three or four months, we realized there was no way we could go back.
 
+## First-time Julia user clocks 30x speed increases over heavily-optimised Python
+
+A new Julia user [reports](https://discourse.julialang.org/t/julias-applicable-context-is-getting-narrower-over-time/55042/5):
+
+> In a few days of work, using Julia for the first time, I was able to produce a prototype that was 14 times faster than [our] heavily optimized Python code.
+
+He continues:
+
+> A few weeks later that code is in production, and has seen another ~2x speedup for a total of ~30x. As far as I can tell, the improvements I made wouldn’t be possible to replicate in Python right now.
+>
+> The fact that we spent 200+ expert hours on the Python version vs. 10 hours of a beginner’s time on the Julia also tells you a lot about the developer experience.
+
+
 ## Python slices drive me nuts
 
 Look at this Python code:

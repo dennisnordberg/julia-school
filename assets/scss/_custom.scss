@@ -9,3 +9,31 @@
 li > ul > li {
     margin-left: $increment * 2;
 }
+
+// List styles
+
+// List styles
+ul {
+    list-style: none;
+}
+
+ul li {
+    &:before {
+        content: "";
+        display: inline-block;
+        height: 16px;
+        width: 13px;
+        vertical-align: text-bottom;
+        background-image: url(/check-mark.svg);
+        background-repeat: no-repeat;
+        margin-right: $increment;
+    }
+}
+
+footer li {
+    &:before {
+        background-image: none;
+        margin: 0;
+        width: 0;
+    }
+}
