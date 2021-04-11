@@ -108,7 +108,7 @@ From the [official Julia website](https://julialang.org/):
 
 Now, some of those 25 million downloads will be people kicking the tyres and then never using it again. Fair enough.
 
-However, a lot of those downloads are in use at major league companies, including:
+However, Julia is used at major league companies and organisations, including:
 
 - Apple
 - Amazon
@@ -119,11 +119,11 @@ However, a lot of those downloads are in use at major league companies, includin
 - Uber
 - KPMG
 - NASA
+- The Brazilian space program
 - The New York Federal Reserve
 - Disney
 - Ford
 - Blackrock, the world's largest asset manager
 - Tencent
-- and [wherever I work](https://www.linkedin.com/in/ronerdos/)!
 
 Pretty impressive list, right?
