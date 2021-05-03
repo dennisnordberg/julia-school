@@ -1,0 +1,58 @@
+<head>
+	<meta charset="utf-8">
+	{{ hugo.Generator }}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	{{/* SEO titles & descriptions */}}
+	{{ if .IsHome }} {{/* For the homepage, including its paginations */}}
+		<title>
+			{{ site.Params.seoTitle }} {{/* Generate SEO headline from `seoTitle` param in config */}}
+		</title>
+		<meta name="description" content="{{ site.Params.description }}">{{/* Generate meta description from `description` param in config */}}
+
+	{{ else }} {{/* For non-homepage pages */}}
+		<title>
+			{{ if .Params.seoTitle }}{{ .Params.seoTitle }}{{ else }}{{ .Title }}{{ end }} {{/* Generate SEO headline from `seoTitle` param in post YAML (fall back to `title` param if `seoTitle` param not filled out) */}}
+		</title>
+		<meta name="description" content="{{ .Description }}"> {{/* Generate meta description from `description` param in config */}}
+	{{ end }}
+
+	{{/* SEO noindex: used to block the "page not found" and "thank you for signing up" pages from appearing on Google */}}
+	{{ if .Params.noindex }} {{/* If the `noindex` parameter has been set to `true` ... */}}
+		<meta name="robots" content="noindex" /> {{/* ... block the page from appearing on Google */}}
+	{{ else }}
+		<meta name="robots" content="noarchive"> {{/* Otherwise, fall back to `noarchive`, which allows the content to be indexed, but not cached by Google and other search engines. This is useful if you don't want old versions of your site visible on Google. This will also stop your site from appearing in the Wayback Machine (archive.org), for better or for worse. */}}
+	{{ end }}
+
+	{{/* SEO canonicals: helps Google understand your site better when using marketing campaign tagging etc */}}
+	<link rel="canonical" href="{{ .Permalink }}" />
+
+	{{/* RSS: People who use RSS readers to consume content will see when you publish new blog posts */}}
+	<link rel="alternate" type="application/rss+xml" title="{{ site.Params.rssTitle }}" href="{{ .Site.BaseURL }}{{ site.Params.blogSection }}/index.xml">
+
+	{{/* Icons */}}
+	<link rel="icon" href="/favicon.svg">
+	<link rel="mask-icon" href="/mask-icon.svg" color="{{ site.Params.color }}">
+	<meta name="theme-color" content="{{ site.Params.color }}">
+
+	{{/* Theme CSS (uses SCSS) */}}
+	{{ $style := resources.Get "scss/theme.scss" | toCSS | minify }}
+	<link rel="stylesheet" href={{ $style.Permalink }}>
+
+	{{/* JavaScript files go here */}}
+	{{ if (fileExists "static/scripts/custom.js") }}
+        <script src="/scripts/custom.js"></script>
+    {{ end }}
+
+    <!--Plausible Analytics-->
+    <script async defer data-domain="julia.school" src="https://plausible.io/js/plausible.js"></script>
+    <!--End Plausible Analytics-->
+
+	{{ with .Site.Params.scripts }}
+		{{ range . }}
+			<script src="{{ . }}"></script>
+		{{ end }}   
+	{{ end }}
+	{{/* end of JavaScript files */}}
+	
+</head>
