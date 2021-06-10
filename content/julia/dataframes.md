@@ -1,11 +1,11 @@
 ---
 title: How to use dataframes in Julia
-date: 2020-03-01 11:00:00+11:00
+date: 2021-06-10 21:09:09+11:00
 seoTitle: Julia dataframes tutorial
 description: "Julia dataframes let you do anything you want: pivot tables, data cleaning, table joins, filtering, and more, all with a nice clean syntax."
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.3.1
+version: 1.6.1
 ---
 
 ## What are dataframes?
@@ -306,7 +306,7 @@ inventory = DataFrame(
 )
 ```
 
-To get just the rows with "Rover" in the item column, use this code:
+To get just the rows with "Rover" in the `item` column, use this code:
 
 ### Code for playing along
 
@@ -338,7 +338,7 @@ On the other side of the equals sign, we're using the `filter` function, which t
 
 The first argument is the change we want to make, which in our case will be to identify all rows in the `item` column containing the word "Rover".
 
-The second argument is the dataframe we want to change. In our case, that's `inventory`.
+The second argument is the dataframe we want to reference. In our case, that's `inventory`.
 
 Let's go back to the first argument---the identification of each "Rover" in the `item` column.
 
@@ -654,3 +654,31 @@ And here's the result---if you're playing along, you'll need to enter `hubble_pi
 │ 1   │ 12       │ 4850      │
 │ 2   │ 13       │ 5199      │
 ```
+
+## How to import a CSV as a dataframe in Julia
+
+First, you'll need to install the `CSV.jl` package if you haven't already. (I covered [how to install the `DataFrames.jl` package](#installing-the-dataframes-package) earlier---simply follow that but `add CSV` in the <code class="julia-pkg">pkg></code> area as well.)
+
+Now, assuming you've already told Julia that you're using the DataFrames and CSV packages:
+
+`using DataFrames, CSV`
+
+then you can import a CSV as a dataframe into Julia like this:
+
+`df = CSV.File("my-file.csv") |> DataFrame`
+
+In the code above, we're telling Julia that we want to create a new dataframe, and that we want to call it `df`. (You can name it whatever you want, though.)
+
+Next, we tell Julia that we have a CSV file, and where to find it. In the example above, `my-file.csv` is located in the same folder as the Julia script that calls it.
+
+However, if the CSV were in a different folder, you could reference it relative to the Julia script. For example, if the CSV is one folder higher than the Julia script, on a Mac you'd write this:
+
+`df = CSV.File("../my-file.csv") |> DataFrame`
+
+(The two dots `..` signify the parent directory in Unix and Mac systems.)
+
+You can also reference the absolute location of the CSV. For instance, if the CSV were on my Mac desktop, I'd write this:
+
+`df = CSV.File("/Users/ron/Desktop/my-file.csv") |> DataFrame`
+
+Finally, the `|> DataFrame` bit tells Julia to create a dataframe from the CSV.

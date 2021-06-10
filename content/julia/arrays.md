@@ -1,10 +1,11 @@
 ---
 title: How to use Julia arrays
-date: 2020-09-15 11:55:09+11:00
+date: 2021-06-10 20:28:09+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, replace items in arrays in Julia.
 authors: ["Ron Erdos"]
 tableOfContents: true
+version: 1.6.1
 ---
 
 ## What is an array in the Julia language?
@@ -333,35 +334,45 @@ We do that like this:
  "Jupiter"
  ```
 
-## How to check if a value matches any item in an array
+## How to check if a value exists in an array
 
 Let's begin with the O.G. planets again:
 
 `planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
-You can check if a value or variable matches _any_ of these planets like this:
+If you wanted to check if Pluto was included in our `planets` array (hey, you never know these days), you can do that like this:
 
-`any("Earth" .== planets)`
+`"Pluto" in planets`
 
-which gives us a result of `true`.
+We get a result of `true`, which tells us that Pluto does in fact exist in our array.
 
-By contrast, if we have a planet not from our solar system:
+Conversely:
 
-`any("Krypton" .== planets)`
+`"Krypton" in planets`
 
-... we get a result of `false`.
+leads to a result of `false`.
 
-There's a couple of things going on here. The first is that we're using what's called a _broadcast_ operation. Instead of just checking if something is true (e.g. `"apples" == "apples"`), we put a dot in front of the double equals sign, like this:
+## How to handle uppercase and lowercase when checking if a value exists in an array
 
-`.==`
+Using the example above, if we had instead checked if `"pluto"` (lowercase) existed in the `planets` array:
 
-The dot means we are applying the operation to each item in the array. In our case, the operation is an equivalence check, using the double equals sign. So we are looking through the `planets` array, checking each planet to see if it's called `"Earth"`.
+`"pluto" in planets`
 
-Of course, only one planet is called Earth, so we have eight `false` results and one `true` result (third rock from the Sun).
+then we'd get a result of `false`, because `"pluto"` is not the same thing as the `"Pluto"`.
 
-However, because we've wrapped the whole thing in an `any` function, the overall result will return `true` (because one of the planets---Earth---passed the equivalence test).
+However, you can handle lowercasing elegantly like this:
 
-Similarly, because _none_ of the planets in the `planets` array is called `"Krypton"`, i.e. we get nine `false` results out of nine, then the overall `any` function returns `false` too.
+`"pluto" in lowercase.(planets)`
+
+This gives us a result of `true`, because we told Julia to lowercase the `planets` array before checking for `"pluto"`.
+
+In the code above, we're using the `lowercase()` function, which turns strings to lowercase in Julia, _but_ we've added a dot immediately after `lowercase`. This dot tells Julia to convert each item in the array to lowercase, rather than to the array itself (which isn't possible and leads to a `MethodError`). This trailing dot is known as a "broadcast function", and it's built in to Julia---no package required.
+
+You can similarly handle uppercase inconsistencies:
+
+`"PLUTO" in uppercase.(planets)`
+
+gives us a result of `true`.
 
 ## How to write a Julia array to a file
 
