@@ -2,7 +2,7 @@
 title: How to use Julia arrays
 date: 2021-06-10 20:28:09+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
-description: This tutorial will show you how to add, delete, replace items in arrays in Julia.
+description: This tutorial will show you how to add, delete, and replace items in arrays in Julia.
 authors: ["Ron Erdos"]
 tableOfContents: true
 version: 1.6.1
@@ -373,6 +373,28 @@ You can similarly handle uppercase inconsistencies:
 `"PLUTO" in uppercase.(planets)`
 
 gives us a result of `true`.
+
+## How to deduplicate a Julia array
+
+This one's pretty simple. Let's say you have an array with duplicates:
+
+`space_companies = ["SpaceX", "Blue Origin", "Boeing", "Sierra Nevada Corporation", "Boeing"]`
+
+(We have Boeing twice.)
+
+Here's how you dedupe it in Julia:
+
+`space_companies_deduped = unique(space_companies)`
+
+This gives you the deduped array:
+
+```
+4-element Vector{String}:
+ "SpaceX"
+ "Blue Origin"
+ "Boeing"
+ "Sierra Nevada Corporation"
+```
 
 ## How to write a Julia array to a file
 
