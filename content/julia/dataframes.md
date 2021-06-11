@@ -56,7 +56,7 @@ This prompt will be blue in colour.
 This means we are now in Julia's package manager (hence the abbreviation <code class="julia-pkg">pkg</code>
 ). We can install packages with a lot less typing in here (compared to at the green `julia` prompt).
 
-Go ahead and add the DataFrames package by typing in the line below and hitting return/Enter:
+Go ahead and add the DataFrames package by inputting the line below:
 
 `add DataFrames`
 
@@ -78,11 +78,11 @@ Now we can actually create our NASA inventory dataframe.
 
 First, we need to tell Julia we want to use the DataFrames package we just installed.
 
-We do that by entering the line below---make sure to press return/Enter at the end:
+We do that by inputting the line below:
 
 `using DataFrames`
 
-Next, we can enter the lines below (again, pressing return/Enter at the end). This will create our NASA inventory dataframe.
+Next, we can input the lines below. This will create our NASA inventory dataframe.
 
 ### Code for playing along
 
@@ -201,7 +201,7 @@ But now all we see is the Julia prompt again:
 
 `julia`
 
-What gives? Well, if you type in `inventory` and hit the return/Enter key, you'll see that the planets in our `description` column now start with a capital letter.
+What gives? Well, if you type `inventory` and hit the return/Enter key, you'll see that the planets in our `description` column now start with a capital letter.
 
 ### Julia output
 
@@ -632,6 +632,7 @@ There are so many times I can remember where I had to manually copy and paste an
 
 OK, let's say you wanted to rename that `pings_sum` column to the cleaner, shorter `pings`. The next section will show you how to do that.
 
+
 ## How to rename columns in a Julia dataframe
 
 OK, so we want to rename the `pings_sum` column from the dataframe above so it becomes `pings`.
@@ -654,6 +655,73 @@ And here's the result---if you're playing along, you'll need to enter `hubble_pi
 │ 1   │ 12       │ 4850      │
 │ 2   │ 13       │ 5199      │
 ```
+
+## How to add an array as a column to a dataframe in Julia
+
+Julia makes it trivial to add a new column to your dataframe, especially if you already have the data in array form.
+
+Let's jump to an example. We'll take a cleaned up version of our `inventory` dataframe from earlier in this tutorial, and add a new column called `condition`, where the values can be `Excellent`, `Good`, `Fair` or `Poor`.
+
+Here's the code to create the `inventory` dataframe without the `condition` column:
+
+```
+inventory = DataFrame(
+	item = [
+		"Mars Rover",
+		"Venus Explorer",
+		"Lunar Rover",
+		"30% Sun Filter"
+	],
+	quantity = [
+		3,
+		1,
+		12,
+		100
+	],
+	description = [
+		"Buggy",
+		"Spaceship",
+		"Neil's car",
+		"Sun filter"
+	]
+)
+```
+
+Once you enter the above code into your terminal, you get:
+
+```
+4×3 DataFrame
+ Row │ item            quantity  description
+     │ String          Int64     String
+─────┼───────────────────────────────────────
+   1 │ Mars Rover             3  Buggy
+   2 │ Venus Explorer         1  Spaceship
+   3 │ Lunar Rover           12  Neil's car
+   4 │ 30% Sun Filter       100  Sun filter
+```
+
+And let's say you already have an array with the condition of each item:
+
+`condition = ["Fair", "Fair", "Fair", "Good"]`
+
+To add this array as a column to our `inventory` dataframe, you do this:
+
+`inventory[!, :condition] = condition`
+
+We'll walk through that code in a second, but after we run the above line, and then call up `inventory` again, we'll see the expanded `inventory` dataframe, complete with its new `condition` column:
+
+```
+4×4 DataFrame
+ Row │ item            quantity  description  condition
+     │ String          Int64     String       String
+─────┼──────────────────────────────────────────────────
+   1 │ Mars Rover             3  Buggy        Fair
+   2 │ Venus Explorer         1  Spaceship    Fair
+   3 │ Lunar Rover           12  Neil's car   Fair
+   4 │ 30% Sun Filter       100  Sun filter   Good
+```
+
+Walking through the `inventory[!, :condition] = condition` code now, we're telling Julia to add a new column (`:condition`) to each row (`!`) of the `inventory` dataframe, and that it should get this data from the array named `condition` (on the right hand side of the equals sign).
 
 ## How to import a CSV as a dataframe in Julia
 
