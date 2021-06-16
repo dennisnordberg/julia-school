@@ -396,9 +396,9 @@ This gives you the deduped array:
  "Sierra Nevada Corporation"
 ```
 
-## How to write a Julia array to a file
+## How to write a Julia array to a CSV file
 
- Let's say you want to write the contents of a Julia array to a `.txt` file.
+ Let's say you want to write the contents of a Julia array to a CSV file.
 
 We'll be using the `array_union` file from earlier in this tutorial. If you've just joined us and want to follow along, you can create it like this:
 
@@ -406,23 +406,23 @@ We'll be using the `array_union` file from earlier in this tutorial. If you've j
 
 Okay, now let's specify where the file should be saved, its name and filetype. To keep things simple, let's store it in a new variable we'll create called `outfile`:
 
- `outfile = "/Users/ron/Desktop/outfile.txt"`
+ `outfile = "/Users/ron/Desktop/outfile.csv"`
 
- So the file will be called `outfile.txt` and it will be created on my Mac desktop.
+ So the file will be called `outfile.csv` and it will be created on my Mac desktop.
 
  Obviously, you'll need to change the `ron` part in the path above. And that's assuming you're on Mac; if you're on Windows, you'll need to alter the path entirely.
 
- Right, now we need to iterate over the `array_union` array and write each element to its own line in our `outfile`. We do that like this:
+ Next, we're going to use a module that's built-in to Julia, called `DelimitedFiles`. Because it comes with Julia out of the box, you don't need to install it. You do, however, need to tell Julia that you want to use it:
 
-```
-open(outfile, "w") do f
-    for i in array_union
-        println(f,i)
-    end
-end
-```
+ `using DelimitedFiles`
 
-You'll end up with an `outfile.txt` on your desktop, the contents of which reads:
+ Now we can use `DelimitedFiles` to write our CSV:
+
+ `writedlm(outfile, array_union)`
+
+ Walking through that code above, we're using a built-in function called `writedlm` to write our `array_union` of planets to our `outfile` (which we defined earlier).
+
+You'll end up with an `outfile.csv` on your desktop, the contents of which reads:
 
 ```
 Mars
@@ -431,5 +431,3 @@ Neptune
 Pluto
 Jupiter
 ```
-
-NB: The code above will overwrite any existing file content. If you want to append, rather than overwrite the file content, then change the `"w"` in the first line to `"a"`, which is short for "append".
