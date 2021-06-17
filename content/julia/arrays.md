@@ -1,6 +1,6 @@
 ---
 title: How to use Julia arrays
-date: 2021-06-10 20:28:09+11:00
+date: 2021-06-17 15:08:08+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, and replace items in arrays in Julia.
 authors: ["Ron Erdos"]
@@ -305,6 +305,39 @@ Let's walk through the code bit by bit:
  ```
 
  `"Earth"` was the only element that appeared in both arrays, so it is the only element that appears in the intersection.
+
+ ## How to get the opposite of the intersection on two arrays in Julia (symmetric difference)
+
+ If you want to get the opposite of the intersection of two arrays in Julia---items that appear in one array or the other but not both, then you need to use `symdiff()`.
+ 
+ <aside>
+ 
+ In mathematics, the set of non-overlapping items between two sets is called the "symmetric difference" (or the "disjunctive union"), hence Julia's function name `symdiff()`.
+
+ </aside>
+
+ Here's an example. Let's say we have the following two arrays. You'll notice the only common item is `Apollo`:
+
+```
+ rockets = ["Apollo", "Saturn", "Falcon Heavy"]
+ greek_gods = ["Apollo", "Zeus", "Hera"]
+ ```
+
+ We run the symdiff function to get all the non-common items:
+
+ `symdiff(rockets, greek_gods)`
+
+ The result:
+
+ ```
+ 4-element Vector{String}:
+ "Saturn"
+ "Falcon Heavy"
+ "Zeus"
+ "Hera"
+ ```
+
+ `Apollo` is the only item in both arrays, and thus it is the only item not to appear in our result.
 
 ## How to get the items that exist in one Julia array but not the other
 
