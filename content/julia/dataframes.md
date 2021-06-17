@@ -1,6 +1,6 @@
 ---
 title: How to use dataframes in Julia
-date: 2021-06-10 21:09:09+11:00
+date: 2021-06-17 14:22:22+11:00
 seoTitle: Julia dataframes tutorial
 description: "Julia dataframes let you do anything you want: pivot tables, data cleaning, table joins, filtering, and more, all with a nice clean syntax."
 authors: ["Ron Erdos"]
@@ -201,7 +201,7 @@ But now all we see is the Julia prompt again:
 
 `julia`
 
-What gives? Well, if you type `inventory` and hit the return/Enter key, you'll see that the planets in our `description` column now start with a capital letter.
+What gives? Well, if you type `inventory` and hit the return/Enter key, you'll see that the planet names in our `description` column now start with a capital letter.
 
 ### Julia output
 
@@ -750,3 +750,50 @@ You can also reference the absolute location of the CSV. For instance, if the CS
 `df = CSV.File("/Users/ron/Desktop/my-file.csv") |> DataFrame`
 
 Finally, the `|> DataFrame` bit tells Julia to create a dataframe from the CSV.
+
+## How to convert an array into a dataframe in Julia
+
+Let's say you have an array like this:
+
+`space_companies = ["SpaceX", "Blue Origin", "Boeing", "Sierra Nevada Corporation"]`
+
+... and you want to convert this array into a Julia dataframe.
+
+First, tell Julia, if you haven't already, that we will be:
+
+`using DataFrames`
+
+This loads the DataFrames package into your workspace.
+
+Now, assuming we want our new dataframe to be called `df` (a standard way to name dataframes in simple examples, although you can choose another name), then we input this:
+
+`df = DataFrame([space_companies], [:space_brands])`
+
+... and we get the following dataframe:
+
+```
+4×1 DataFrame
+ Row │ space_brands
+     │ String
+─────┼───────────────────────────
+   1 │ SpaceX
+   2 │ Blue Origin
+   3 │ Boeing
+   4 │ Sierra Nevada Corporation
+```
+
+I deliberately named the column `space_brands` so it would be more obvious in the code above as to where we are referencing our array (`space_companies`) and where we are naming our column (`space_brands`).
+
+Let's walk through the code above now.
+
+> `df =` We are creating a new variable, which we have named `df`.
+
+> `DataFrame(` Here we tell Julia to create a dataframe, and we open the brackets, inside of which we'll be configuring said dataframe.
+
+`[space_companies]` Here we're telling Julia which array (`space_companies`) we want to reference for our dataframe's content. Important: The array name must be inside square brackets `[]`. The reason why can be slightly confusing, but it's because Julia is expecting a list (otherwise known as an array) of array names, and just because we happen to only have one array (`space_companies`) in this example, doesn't mean Julia isn't able to handle more---and therefore, it expects an array of array names. If that's confusing then just remember to put square brackets around your array name.
+
+> `,` We separate our array name from the next bit of config with a comma.
+
+> `[:space_brands]` Here we tell Julia what we want to name the column in our new dataframe. In this case, I've gone for `space_brands` as the column name, but we have to add some additional characters to the name. We first add a colon `:` to signify that this is a dataframes column name (it's part of the DataFrames standard). Next, we have to wrap the colon and column name in square brackets `[]`. So instead of `:space_brands`, we write `[:space_brands]`. The reason for the square brackets is that Julia needs to be ready for more than one array/column name combo, and therefore expects an array---even if you only have one array and column name.
+
+> `)` Here we close the brackets we opened earlier.
