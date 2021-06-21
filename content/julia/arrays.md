@@ -1,6 +1,6 @@
 ---
 title: How to use Julia arrays
-date: 2021-06-17 15:08:08+11:00
+date: 2021-06-21 16:56:08+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, and replace items in arrays in Julia.
 authors: ["Ron Erdos"]
@@ -14,59 +14,51 @@ Like in many programming languages, in Julia, an array is an ordered collection 
 
 `planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
-## How to create a Julia array with the numbers in a given range?
+## How to create a Julia array with the numbers in a given range
 
-If you want a Julia array with all the numbers from 1 to 10:
+If you want a Julia array with all the numbers from 1 to 5:
 
-`collect(1:10)`
+`collect(1:5)`
 
 We get:
 
 ```
-10-element Array{Int64,1}:
+5-element Array{Int64,1}:
   1
   2
   3
   4
   5
-  6
-  7
-  8
-  9
- 10
  ```
 
- (Yes, I specially designed this website so the above would look like _The Matrix_.)
+If we want to count by anything other than 1, we can put the increment size between our start and end numbers.
 
-If we want to count by anything other than 1, we can put the increment size between our start and end numbers. For example, if we want an array with the numbers from 5 to 15, counting by 2, we do this:
+For example, if we want an array with the numbers from 1 to 5, counting by 2, we do this:
 
-`collect(5:2:15)`
+`collect(1:2:5)`
 
 We get:
 
 ```
-6-element Array{Int64,1}:
-  5
-  7
-  9
- 11
- 13
- 15
+3-element Vector{Int64}:
+ 1
+ 3
+ 5
  ```
 
-## How to remove an item from an array in Julia
+## How to remove the last item from a Julia array
 
 Since Pluto is now officially a "dwarf planet" rather than a regular planet, perhaps it shouldn't be in the `planets` array above.
-
-We can remove elements from Julia arrays in a few different ways.
-
-### How to use the "pop!" function to remove the last item from a Julia array
 
 To remove the last item from an array, we can use `pop!()`:
 
 `pop!(planets)`
 
-Now when we have Julia show us the `planets` array again, we get:
+Now when we have Julia show us the updated array with:
+
+`planets`
+
+... we get:
 
 ```
 8-element Array{String,1}:
@@ -80,15 +72,15 @@ Now when we have Julia show us the `planets` array again, we get:
  "Neptune"
  ```
 
- Bye Pluto!
+ Bye Pluto.
 
-### How to use the "popfirst!" function to remove the first item from a Julia array
+## How to remove the first item from a Julia array
 
- Let's say the Sun has grown in size and swallowed Mercury. Yikes, likely to be quite hot here on Earth! Anyway, let's delete Mercury (the first element in our array) from `planets`:
+ Let's say the Sun has grown in size and swallowed Mercury. Now we need to delete Mercury (the first element in our array) from our `planets` array. We can do this using a function called `popfirst()`:
 
 ` popfirst!(planets)`
 
- Apart from it getting rather hot here on Earth, here's how our `planets` array looks now:
+We get the following result:
 
  ```
  7-element Array{String,1}:
@@ -101,70 +93,72 @@ Now when we have Julia show us the `planets` array again, we get:
  "Neptune"
  ```
 
- Bye Mercury! Note that Pluto is also missing because we deleted it earlier in this tutorial.
+Now Mercury has been removed from our array too. Pluto is missing too, because we deleted it earlier.
 
-And then there were seven.
+## How to remove an item from a Julia array by index number
 
-### How to use the "deleteat!" function to remove a given item from a Julia array
+Let's create a new array:
 
- What if we don't want to delete the first or last item in a Julia array, but rather, a given item in the middle? If we know the index number of the item we want to remove, we can do this with the `deleteat!` function. (It looks like the function name is "delete eat" but it's actually "delete at" 😂).
+`astronauts = ["Buzz Aldrin", "Neil Armstrong", "Michael Collins", "Yuri Gagarin"]`
 
- In our array of what is now seven planets, we can delete Jupiter, the fourth item, like this:
+ What if we now want to delete, say, the third astronaut in our array?
+ 
+ We can do this with the `deleteat!` function. (It looks like the function name is "delete eat" but it's actually "delete at" 😂).
 
- `deleteat!(planets, 4)`
+ `deleteat!(astronauts, 3)`
 
  We get:
 
  ```
- 6-element Array{String,1}:
- "Venus"
- "Mars"
- "Earth"
- "Saturn"
- "Uranus"
- "Neptune"
+ 3-element Vector{String}:
+ "Buzz Aldrin"
+ "Neil Armstrong"
+ "Yuri Gagarin"
  ```
 
- Bye Jupiter! Geez, only six planets left!
+## How to delete elements from an array by name in Julia
 
-### How to delete elements from an array by name in Julia
+There isn't a simple way to delete an element by name in Julia. However, there are a few slightly complex approaches. Of these, the one I like is below.
 
-There isn't a simple way to delete an element by name in Julia. However, there are a few complex approaches. Of these, the one I like is:
+Say we have the following array:
 
-`deleteat!(planets, findall(x->x=="Saturn",planets))`
+`rockets = ["Apollo", "Saturn", "Falcon Heavy"]`
+
+`deleteat!(rockets, findall(x->x=="Saturn",rockets))`
 
 We get:
 
 ```
-5-element Array{String,1}:
- "Venus"
- "Mars"
- "Earth"
- "Uranus"
- "Neptune"
+2-element Vector{String}:
+ "Apollo"
+ "Falcon Heavy"
  ```
 
-Bye Saturn! And then there were five.
+## How to add an item to an array in Julia
 
-## How to add items to an array in Julia
+Let's start with our original planets array (including Pluto) again:
 
-NASA (with a little help from SpaceX and Blue Origin) have just discovered a new planet, Mythos*. To add it to our `planets` array, we use `push!()`:
+`planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
+
+And let's pretend NASA (with a little help from SpaceX and Blue Origin) have just discovered a new planet, Mythos. To add it to our `planets` array, we use `push!()`:
 
 `push!(planets, "Mythos")`
 
 We get:
 
 ```
-6-element Array{String,1}:
+10-element Vector{String}:
+ "Mercury"
  "Venus"
  "Mars"
  "Earth"
+ "Jupiter"
+ "Saturn"
  "Uranus"
  "Neptune"
+ "Pluto"
  "Mythos"
  ```
-
-* _Not really._
 
 ## How to find and replace strings in Julia arrays
 
@@ -188,8 +182,6 @@ array_1
  "Apollo"
  ```
 
- Great!
-
 ### Code walkthrough
 
 Let's go through the example above bit by bit:
@@ -200,7 +192,7 @@ Let's go through the example above bit by bit:
 
 > `(` Here, we open the function brackets, a necessary task.
 
-> `array_1` Now we tell Julia which array to perform our "find and replace". In this case, it's an array named `array_1`.
+> `array_1` Now we tell Julia which array to perform our "find and replace". In this case, it's our array named `array_1`.
 
 > `"apollo"` Here's the "needle" we're looking for in the proverbial haystack. We're looking for all instances of `apollo`.
 
@@ -263,16 +255,16 @@ Let's walk through the code bit by bit:
 
  Let's say we have two arrays:
 
- ```
- array_3 = ["Mars", "Earth", "Neptune"]
- array_4 = ["Pluto", "Earth", "Jupiter"]
- ```
+```
+planets_a = ["Mars", "Earth", "Neptune"]
+planets_b = ["Pluto", "Earth", "Jupiter"]
+```
 
  Now let's say we want to see all the elements in both arrays, deduped (note that `"Earth"` appears in both arrays).
 
  We can do that like this:
 
- `array_union = union(array_3, array_4)`
+ `array_union = union(planets_a, planets_b)`
 
  We get:
 
@@ -285,7 +277,7 @@ Let's walk through the code bit by bit:
  "Jupiter"
  ```
 
- Notice that we only get `"Earth"` once, even though it appeared in both arrays.
+ Notice that the result is deduped---we only get `"Earth"` once, even though it appeared in both arrays.
 
 ## How to get the intersection of two arrays in Julia
 
@@ -295,7 +287,7 @@ Let's walk through the code bit by bit:
 
  We do that like this:
 
- `array_intersect = intersect(array_3, array_4)`
+ `array_intersect = intersect(planets_a, planets_b)`
 
  The result:
 
@@ -341,11 +333,18 @@ Let's walk through the code bit by bit:
 
 ## How to get the items that exist in one Julia array but not the other
 
-Let's say we want the items that exist in `array_3`, but don't appear in `array_4`.
+Here are our two planet arrays again:
+
+```
+planets_a = ["Mars", "Earth", "Neptune"]
+planets_b = ["Pluto", "Earth", "Jupiter"]
+```
+
+Let's say we want the items that exist in `planets_a`, but don't appear in `planets_b`.
 
 We do that like this:
 
-`setdiff(array_3, array_4)`
+`setdiff(planets_a, planets_b)`
 
 ... and we get:
 
@@ -357,7 +356,7 @@ We do that like this:
 
  The order matters here. If we reverse the order of the arrays inside the `setdiff` function, like this:
 
- `setdiff(array_4, array_3)`
+ `setdiff(planets_b, planets_a)`
 
  ... we get:
 
@@ -369,7 +368,7 @@ We do that like this:
 
 ## How to check if a value exists in an array
 
-Let's begin with the O.G. planets again:
+Let's begin with the O.G. nine planets again:
 
 `planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
@@ -429,11 +428,25 @@ This gives you the deduped array:
  "Sierra Nevada Corporation"
 ```
 
+Or if you wanted to overwrite the original array with the deduped list, you could do it like this:
+
+`unique!(space_companies)`
+
+Now when you call up `space_companies`, you get this:
+
+```
+4-element Vector{String}:
+ "SpaceX"
+ "Blue Origin"
+ "Boeing"
+ "Sierra Nevada Corporation"
+ ```
+
 ## How to write a Julia array to a CSV file
 
  Let's say you want to write the contents of a Julia array to a CSV file.
 
-We'll be using the `array_union` file from earlier in this tutorial. If you've just joined us and want to follow along, you can create it like this:
+We'll be using the `array_union` file from earlier in this tutorial. If you've just joined and want to follow along, you can create it like this:
 
 `array_union = ["Mars", "Earth", "Neptune", "Pluto", "Jupiter"]`
 
