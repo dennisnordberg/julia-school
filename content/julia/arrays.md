@@ -10,7 +10,7 @@ version: 1.6.1
 
 ## What is an array in the Julia language?
 
-Like in many programming languages, in Julia, an array is an ordered collection of items. You create arrays in Julia with square brackets, with each item separated with a comma:
+Like in many programming languages, in Julia, an array is an ordered collection, or list, of items. You create arrays in Julia with square brackets, with each item separated with a comma:
 
 `planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
