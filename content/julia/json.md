@@ -2,29 +2,31 @@
 title: How to convert nested JSON to a dataframe or CSV in Julia
 date: 2021-06-25 16:44:59+11:00
 seoTitle:
-description:
+description: Do you want to use Julia to turn nested JSON into a table, be it a dataframe or CSV? Here's how.
 authors: ["Ron Erdos"]
-tableOfContents: false
+tableOfContents: true
 draft: true
 ---
+
+## Inputs and outputs
 
 Let's say you have the following nested JSON:
 
 ```
 {
-    "id": 123456,
+    "id": 1234,
     "org": "SpaceX",
-    "payloads": [
+    "launchers": [
         {
-            "launcher": "Falcon 1",
+            "name": "Falcon 1",
             "max_payload": 180
         },
         {
-            "launcher": "Falcon 9",
+            "name": "Falcon 9",
             "max_payload": 22800
         },
         {
-            "launcher": "Falcon Heavy",
+            "name": "Falcon Heavy",
             "max_payload": 63800
         }
     ]
@@ -33,7 +35,15 @@ Let's say you have the following nested JSON:
 
 ... and you want to use Julia to convert it to a CSV like this:
 
-`[insert CSV format]`
+| id     | org    | launcher   | max_payload |
+|--------|--------|------------|-------------|
+| 1234 | SpaceX | Falcon 1     | 180         |
+| 1234 | SpaceX | Falcon 9     | 22800       |
+| 1234 | SpaceX | Falcon Heavy | 63800       |
+
+This tutorial will show you how to do that using Julia. Let's get started!
+
+## Converting the JSON to a string variable
 
 First, we need to escape the double quotes with a backslash, so that we can create this JSON as a string in Julia.
 
@@ -41,19 +51,19 @@ I did this with a simple find and replace in VS Code, yielding:
 
 ```
 {
-    \"id\": 123456,
+    \"id\": 1234,
     \"org\": \"SpaceX\",
-    \"payloads\": [
+    \"launchers\": [
         {
-            \"launcher\": \"Falcon 1\",
+            \"name\": \"Falcon 1\",
             \"max_payload\": 180
         },
         {
-            \"launcher\": \"Falcon 9\",
+            \"name\": \"Falcon 9\",
             \"max_payload\": 22800
         },
         {
-            \"launcher\": \"Falcon Heavy\",
+            \"name\": \"Falcon Heavy\",
             \"max_payload\": 63800
         }
     ]
@@ -64,24 +74,23 @@ Let's create this as variable in Julia:
 
 ```
 spacex = "{
-    \"id\": 123456,
+    \"id\": 1234,
     \"org\": \"SpaceX\",
-    \"payloads\": [
+    \"launchers\": [
         {
-            \"launcher\": \"Falcon 1\",
+            \"name\": \"Falcon 1\",
             \"max_payload\": 180
         },
         {
-            \"launcher\": \"Falcon 9\",
+            \"name\": \"Falcon 9\",
             \"max_payload\": 22800
         },
         {
-            \"launcher\": \"Falcon Heavy\",
+            \"name\": \"Falcon Heavy\",
             \"max_payload\": 63800
         }
     ]
-}
-"
+}"
 ```
 
 All we've done here is create the variable name (`spacex =`) and then wrap all that escaped JSON inside double quotes.
@@ -96,7 +105,13 @@ We get:
 
 Now let's turn this `String` into structured, usable data.
 
+## Converting our string variable into structured data
+
 To do this, we need to add the `JSON` package.
+
+<aside>
+
+### Installing the JSON package in Julia
 
 At the Julia prompt:
 
@@ -126,6 +141,8 @@ Hit the delete key to return to the regular prompt:
 
 Now we can get to work.
 
+</aside>
+
 First, let's tell Julia we want to _use_ the package:
 
 `using JSON`
@@ -134,16 +151,26 @@ Now we can go ahead and actually use it:
 
 `spacex_dict = JSON.parse(spacex)`
 
+Above, we're creating a new variable, `spacex_dict`, by parsing the `spacex` data with the `JSON` package.
+
 We get:
 
 ```
 Dict{String, Any} with 3 entries:
-  "id"       => 123456
-  "org"      => "SpaceX"
-  "payloads" => Any[Dict{String, Any}("max_payload"=>180, "launcher"=>"Falcon 1…
+  "id"        => 1234
+  "org"       => "SpaceX"
+  "launchers" => Any[Dict{String, Any}("name"=>"Falcon 1", "max_payload"=>180), Dict{String, Any}("name"=>"Falcon 9", "max_payload"=>22800), Dict{String, Any}("name"=>"Falcon He…
 ```
 
-Note that the terminal output above has been truncated, since that's how it showed up for me in my terminal---it may well be truncated for you too. Nevertheless, all our data is there in memory.
+<aside>
+
+### Truncated terminal output in Julia
+
+You can scroll horizontally inside the code block above.
+
+However, please note that the terminal output above has been truncated---even when you scroll to the end---since that's how it showed up for me in my terminal on my 13" laptop. Nevertheless, all our data is there in memory, which is what counts.
+
+</aside>
 
 Let's go ahead and check the type of our new `spacex_dict` variable:
 
@@ -153,53 +180,77 @@ We get:
 
 `Dict{String, Any}`
 
-Okay, let's go ahead and turn this into a dataframe. We're going to use the DataFrames package. If you don't have it installed, go to the package manager by inputting `]` and then inputting `add DataFrames`. You can return to the Julia prompt by pressing the delete key once the package has been installed.
+So we have a dictionary (`Dict`). That's great---it's more structured than the simple `String` we had before.
+
+## Creating a dataframe from our structured data variable
+
+Okay, let's go ahead and turn this into a dataframe. We're going to use the DataFrames package.
+
+<aside>
+
+### Installing the Dataframes package in Julia
+
+If you don't have the Julia dataframes package installed, go to the package manager by inputting `]` and then inputting `add DataFrames`. You can return to the Julia prompt by pressing the delete key once the package has been installed.
+
+</aside>
 
 Now let's tell Julia we want to use the DataFrames package:
 
 `using DataFrames`
 
-Now let's create a dataframe from our data. I'm going to use the conventional `df` as our variable name, but you can choose anything you like:
+Now we can actually create a dataframe from our data. I'm going to use the conventional `df` as our variable name, but you can choose anything you like:
 
 `df = DataFrame(spacex_dict)`
 
-Note that `DataFrame` is singular above, even though it's plural (`DataFrames`) when we add it in the package manager and when we tell Julia we'll be `using` it.
+<aside>
+
+### Singular vs plural: "DataFrame" vs "DataFrames"
+
+Note that `DataFrame` is singular in the code above---because we're only creating one dataframe.
+
+However, we use the plural `DataFrames` when we add it in the package manager and when we tell Julia we'll be `using` it.
+
+</aside>
 
 We get:
 
 ```
 3×3 DataFrame
- Row │ id      org     payloads
-     │ Int64   String  Any
-─────┼───────────────────────────────────────────────────
-   1 │ 123456  SpaceX  Dict{String, Any}("launcher"=>"Falco…
-   2 │ 123456  SpaceX  Dict{String, Any}("launcher"=>"Falco…
-   3 │ 123456  SpaceX  Dict{String, Any}("launcher"=>"Falco…
+ Row │ id     launchers                          org
+     │ Int64  Any                                String
+─────┼──────────────────────────────────────────────────
+   1 │  1234  Dict{String, Any}("name"=>"Falco…  SpaceX
+   2 │  1234  Dict{String, Any}("name"=>"Falco…  SpaceX
+   3 │  1234  Dict{String, Any}("name"=>"Falco…  SpaceX
 ```
 
 Again, note the output has been truncated---this is how it shows up for me in my terminal. Again, all the data is there in memory, though.
 
-The above dataframe is _sorta_ what we want: the non-nested JSON (`id`, `org`) is appearing properly in distinct columns. However, the nested JSON---the name of the launch vehicle and its max payload for low earth orbit---is appearing all as one blob of a dictionary in the `payloads` column.
+The above dataframe is _sorta_ what we want: the non-nested JSON (`id`, `org`) is appearing properly in distinct columns.
 
-Our next step will be to turn this dictionary into clean columns in our dataframe.
+However, the nested JSON---the `name` of the launch vehicle and its `max_payload` for low earth orbit---is appearing all as one blob of a dictionary in the `launchers` column.
+
+Our next step will be to turn these dictionaries into clean columns in our dataframe.
+
+## Cleaning up the dataframe
 
 Let's take a closer look at the payloads column:
 
-`payloads = df[!, :payloads]`
+`launchers_col = df[!, :launchers]`
 
-I've written a tutorial on [Julia dataframes](../dataframes/) if you're not familiar with them, but let's walk through this code real quick:
+I've written a tutorial on [Julia dataframes](../dataframes/) if you're not familiar with them, but let's walk through this code briefly:
 
-> `payloads =` Here we're creating a new variable, `payloads` to use later.
+> `launchers_col =` Here we're creating a new variable, `launchers_col` to use later.
 
-> `df[!, :payloads]` From the dataframe named "df" (`df[]`), get all rows (`!`) from the payloads column `:payloads`.
+> `df[!, :launchers]` From the dataframe named "df" (`df[]`), get all rows (`!`) from the launchers column (`:launchers`).
 
 We get:
 
 ```
 3-element Vector{Any}:
- Dict{String, Any}("max_payload" => 180, "launcher" => "Falcon 1")
- Dict{String, Any}("max_payload" => 22800, "launcher" => "Falcon 9")
- Dict{String, Any}("max_payload" => 63800, "launcher" => "Falcon Heavy")
+ Dict{String, Any}("name" => "Falcon 1", "max_payload" => 180)
+ Dict{String, Any}("name" => "Falcon 9", "max_payload" => 22800)
+ Dict{String, Any}("name" => "Falcon Heavy", "max_payload" => 63800)
 ```
 
 `payloads_length = length(payloads)`
@@ -258,9 +309,9 @@ Let's take a look at our new `max_payloads` array:
  Row │ id      org     payloads                           launchers     max_payloads
      │ Int64   String  Any                                String        Int64
 ─────┼───────────────────────────────────────────────────────────────────────────────
-   1 │ 123456  SpaceX  Dict{String, Any}("max_payload"=…  Falcon 1               180
-   2 │ 123456  SpaceX  Dict{String, Any}("max_payload"=…  Falcon 9             22800
-   3 │ 123456  SpaceX  Dict{String, Any}("max_payload"=…  Falcon Heavy         63800
+   1 │ 1234  SpaceX  Dict{String, Any}("max_payload"=…  Falcon 1               180
+   2 │ 1234  SpaceX  Dict{String, Any}("max_payload"=…  Falcon 9             22800
+   3 │ 1234  SpaceX  Dict{String, Any}("max_payload"=…  Falcon Heavy         63800
 ```
 
 (Remember you can scroll horizontally on this site inside the code boxes to see the full output.)
@@ -276,7 +327,7 @@ We get our finished, fully-structured dataframe:
  Row │ id      org     launchers     max_payloads
      │ Int64   String  String        Int64
 ─────┼────────────────────────────────────────────
-   1 │ 123456  SpaceX  Falcon 1               180
-   2 │ 123456  SpaceX  Falcon 9             22800
-   3 │ 123456  SpaceX  Falcon Heavy         63800
+   1 │ 1234  SpaceX  Falcon 1               180
+   2 │ 1234  SpaceX  Falcon 9             22800
+   3 │ 1234  SpaceX  Falcon Heavy         63800
 ```
