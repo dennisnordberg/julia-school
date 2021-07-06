@@ -43,7 +43,7 @@ If you want to read more on this, I wrote a piece on [why Julia is a great progr
 
 I created this website because I'd love to see the Julia ecosystem grow even further ([it's already being used at top companies you've heard of](../julia/why/#who-uses-julia)).
 
-Good luck, and please feel free to reach out with any questions, tutorial requests, or just to say hi. I'm on [LinkedIn](https://www.linkedin.com/in/ronerdos/) and on email: [my firstname] at [my lastname] dot com dot au.
+Good luck, and please feel free to reach out with any questions, tutorial requests, or just to say hi. I'm on [Twitter](https://twitter.com/RonErdos), [LinkedIn](https://www.linkedin.com/in/ronerdos/) and on email: [my firstname] at [my lastname] dot com dot au.
 
 Cheers,
 
