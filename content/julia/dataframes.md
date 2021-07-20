@@ -743,7 +743,9 @@ We get:
 
 Let's walk through that code. First, we're telling Julia to add a new column (`:condition`) to each row (`!`) of the `inventory` dataframe, and that it should get this data from the array named `condition` (on the right hand side of the equals sign).
 
-## How to import a CSV as a dataframe in Julia
+## How to write a CSV from a dataframe in Julia
+
+It's easy to write a CSV from our above `inventory` dataframe.
 
 First, you'll need to install the `CSV.jl` package if you haven't already. (I covered [how to install the `DataFrames.jl` package](#installing-the-dataframes-package) earlier---simply follow that but `add CSV` in the <code class="julia-pkg">pkg></code> area as well.)
 
@@ -751,7 +753,19 @@ Now, assuming you've already told Julia that you're using the DataFrames and CSV
 
 `using DataFrames, CSV`
 
-then you can import a CSV as a dataframe into Julia like this:
+... then we can write our CSV like this:
+
+`CSV.write("/Users/ron/Desktop/inventory.csv", inventory)`
+
+This takes our `inventory` dataframe and writes a CSV named `inventory.csv` to my Mac's desktop (you can save it wherever you'd like).
+
+## How to import a CSV as a dataframe in Julia
+
+Once we've installed the `CSV.jl` package already (see above section on writing CSV files), then we tell Julia we want to use it:
+
+`using CSV`
+
+Now we can import a CSV as a dataframe into Julia like this:
 
 `df = CSV.File("my-file.csv") |> DataFrame`
 
