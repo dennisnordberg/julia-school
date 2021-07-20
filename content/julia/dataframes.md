@@ -1,6 +1,6 @@
 ---
 title: How to use dataframes in Julia
-date: 2021-06-17 14:22:22+11:00
+date: 2021-07-20 12:57:22+11:00
 seoTitle: Julia dataframes tutorial
 description: "Julia dataframes let you do anything you want: pivot tables, data cleaning, table joins, filtering, and more, all with a nice clean syntax."
 authors: ["Ron Erdos"]
@@ -35,9 +35,9 @@ If you want to play along (as opposed to just reading through this tutorial), yo
 
 Once you have Julia up and running, you'll see this prompt:
 
-`julia`
+`julia>`
 
-This prompt will be green in color. Yeah, like in _The Matrix_.
+This prompt will be green in colour, probably on a black background. Yeah, like in _The Matrix_.
 
 Onwards!
 
@@ -47,14 +47,14 @@ The first dataframes-specific thing we need to is to install the DataFrames pack
 
 The easiest way to do this is to type the `]` (right square bracket, located above the return/Enter key on your keyboard) into the Julia terminal.
 
-This changes the `julia` prompt we saw above into one that says:
+This changes the `julia>` prompt we saw above into one that says:
 
 <code class="julia-pkg">pkg></code>
 
 This prompt will be blue in colour.
 
 This means we are now in Julia's package manager (hence the abbreviation <code class="julia-pkg">pkg</code>
-). We can install packages with a lot less typing in here (compared to at the green `julia` prompt).
+). We can install packages with a lot less typing in here (compared to at the green `julia>` prompt).
 
 Go ahead and add the DataFrames package by inputting the line below:
 
@@ -70,7 +70,7 @@ To exit the package manager area, and to go back to the main Julia area, simply 
 
 You'll now see the Julia prompt again:
 
-`julia`
+`julia>`
 
 Now we can actually create our NASA inventory dataframe.
 
@@ -82,9 +82,7 @@ We do that by inputting the line below:
 
 `using DataFrames`
 
-Next, we can input the lines below. This will create our NASA inventory dataframe.
-
-### Code for playing along
+Next, we input the lines below. This will create our NASA inventory dataframe:
 
 ```
 inventory = DataFrame(
@@ -123,9 +121,7 @@ However, my production Julia code is not prettified in this way.
 
 </aside>
 
-### Julia output
-
-You'll end up with this output in your terminal:
+We get:
 
 ```
 4×3 DataFrame
@@ -184,8 +180,6 @@ Let's clean that up.
 
 Here's how you do that:
 
-### Code for playing along
-
 ```
 for i in eachrow(inventory)
 	i[:description] = replace(i[:description], "mars"=>"Mars")
@@ -193,13 +187,19 @@ for i in eachrow(inventory)
 end
 ```
 
+Let's walk through that code line-by-line:
+
+> `for i in eachrow(inventory)` Here we open up a "for loop", where we'll iterate over each row in the `inventory` dataframe.
+
+> `i[:description] = replace(i[:description], "mars"=>"Mars")` Here we replace any instance of `mars` in the `description` column, and replace it with the correctly-cased `Mars`.
+
 Talking through the code above, it says "for each row in the `inventory` dataframe, within the `description` column, replace `mars` with `Mars` (because grammar) and `venus` with `Venus` (also because grammar).
 
 Alright, so you've typed or copied and pasted the code above into Julia and hit the return/Enter key.
 
 But now all we see is the Julia prompt again:
 
-`julia`
+`julia>`
 
 What gives? Well, if you type `inventory` and hit the return/Enter key, you'll see that the planet names in our `description` column now start with a capital letter.
 
@@ -277,11 +277,9 @@ There we are---all cleaned up for the ball!
 
 ## How to filter a dataframe in Julia
 
-Let's say, for the dataframe above, we only want the rows which mention "Rover".
+Let's say, for the dataframe shown immediately above this section, we only want the rows which mention "Rover".
 
-If you're just joining us now, here's the code to create that dataframe:
-
-### Code for playing along
+If you're just joining us now, you can create the dataframe by inputting the following at the Julia prompt:
 
 ```
 inventory = DataFrame(
@@ -306,9 +304,7 @@ inventory = DataFrame(
 )
 ```
 
-To get just the rows with "Rover" in the `item` column, use this code:
-
-### Code for playing along
+Now, to get just the rows with "Rover" in the `item` column, use this code:
 
 ```
 rovers = filter(
@@ -317,7 +313,7 @@ rovers = filter(
 )
 ```
 
-### Julia output
+We get:
 
 ```
 2×3 DataFrame
@@ -328,35 +324,33 @@ rovers = filter(
 │ 2   │ Lunar Rover │ 12       │ Neil's used car          │
 ```
 
-### Code walkthrough
+Let's walk through that code line by line:
 
-As usual on this site, I've broken up the code above for easier reading.
+> `rovers = filter(` 
+>
+> Here we create a variable named `rovers`, which we'll use to store the filtered, dataframe we're about to create. We'll use Julia's built-in `filter` function to do so. This function takes two "arguments", or inputs, inside its brackets---these are covered below.
 
-First, we create a variable, `rovers`, which we'll use to store the filtered, Rover-only version of the master dataframe, `inventory`. No Venus Explorers welcome here!
+> `x -> any(occursin.(["Rover"], x.item)),`
+>
+> The first "argument" is the rule for the filtering. In our case, we want to include only the rows which contain the word "Rover" in the `item` column.
+>
+> If you look closely, our rule is actually a function. It's not a named function like `print()`.
+>
+> Rather, it's an "anonymous" function, because it doesn't have a name. Specifically, it's a "stabby lambda" anonymous function. "Stabby" because it has a stabby arrow, like this:
+>
+> `->`
+>
+> And the reason we're using an anonymous rather than named function is because we're only using it once, and it's more concise this way. Whereas we might use our `print` function every second day, so it makes sense for it to have a name.
+>
+> So what does this "stabby lambda" anonymous function actually do? It says for a given `x`, are there `any` occasions where `"Rover"` occurs in the item column (`x.item`). And because we're using it inside our `filter` function, we are filtering by this rule, this anonymous function.
 
-On the other side of the equals sign, we're using the `filter` function, which takes two arguments.
+> `inventory`
+>
+> The second "argument" is the dataframe we want to reference. In our case, that's the `inventory` dataframe.
 
-The first argument is the change we want to make, which in our case will be to identify all rows in the `item` column containing the word "Rover".
-
-The second argument is the dataframe we want to reference. In our case, that's `inventory`.
-
-Let's go back to the first argument---the identification of each "Rover" in the `item` column.
-
-It looks like this:
-
-`x -> any(occursin.(["Rover"], x.item))`
-
-If you look closely, that's actually a function. It's not a named function like `print("Hello world")`, which is sensibly named "print".
-
-Rather, it's an "anonymous" function, because it doesn't have a name. Specifically, it's a "stabby lambda" anonymous function. "Stabby" because it has a stabby arrow: `->`.
-
-And the reason we're using an anonymous rather than named function is because we're only using it once, and it's more concise this way. Whereas our `print` function we might use every second day.
-
-So what does this "stabby lambda" anonymous function actually do?
-
-Right, now we're getting down to it. Bear with me. It says for a given `x`, are there `any` occasions where `"Rover"` occurs in the item column (`x.item`).
-
-And because this stabby lambda function is inside another function, the `filter()` function, we're doing some filtering. As above, the second argument inside `filter()` is simply the dataframe we want Julia to filter: `inventory`. So that's how we end up with a dataframe named `rovers` which is Rover-only subset of our `inventory` dataframe.
+> `)`
+>
+> Here we close the `filter` function we began using in the first line.
 
 ## How to join two dataframes in Julia
 
@@ -485,13 +479,9 @@ As you may have gathered, the format inside `Date()` is yyyy,mm,dd -- we use com
 
 Onwards. So, if you haven't already, enter the code below into your Julia terminal:
 
-### Code for playing along
-
 `using Dates`
 
-Now let's create our Hubble telescope pings dataframe:
-
-### Code for playing along
+Now let's create our Hubble telescope pings dataframe with the code below. I've shown it in elongated form so you don't have to scroll horizontally to see it all.
 
 ```
 hubble_pings = DataFrame(
@@ -546,9 +536,7 @@ hubble_pings = DataFrame(
 )
 ```
 
-And here's the resultant dataframe. Remember to type `hubble_pings` and hit return/Enter to see it.
-
-### Julia output
+We get:
 
 ```
 14×3 DataFrame
@@ -579,9 +567,7 @@ In our dataframe, we have seven days in Week 12 (of the year 2020), and another 
 
 We're going to use that `iso_week` column to pivot our data to get our weekly pings total.
 
-The actual pivot table code is very simple; it's just one line.
-
-### Code for playing along
+The Julia code to make a pivot table is quite simple:
 
 ```
 hubble_pings_weekly = by(
@@ -607,7 +593,7 @@ This tells Julia to take a given column, `:pings`, in the source dataframe and t
 
 Take a look at our pivot table below---if you're playing along, type `hubble_pings_weekly` into your terminal and hit return/Enter:
 
-### Julia output
+We get:
 
 ```
 2×2 DataFrame
@@ -618,15 +604,15 @@ Take a look at our pivot table below---if you're playing along, type `hubble_pin
 │ 2   │ 13       │ 5199      │
 ```
 
+So, from the above dataframe (which we named `hubble_pings_weekly`), we can see there were 4,850 pings from the Hubble telescope in Week 12, and 5,199 pings in Week 13.
+
 <aside>
 
 ### Why pivot tables are better in Julia compared to Excel or Google Sheets
 
-The reason I love Julia pivot tables is they are a first-class citizen. You can take this `hubble_pings_weekly` dataframe, run transformations on it, and it will act just like any other Julia dataframe.
+The reason I love Julia pivot tables is they are a first-class citizen. You can take this `hubble_pings_weekly` dataframe, run transformations on it, and it works just like any other Julia dataframe.
 
-By contrast, pivot table worksheets in Excel or Google Sheets are decidedly _not_ first-class citizens.
-
-There are so many times I can remember where I had to manually copy and paste an Excel or Google Sheets pivot table into a new worksheet, just so I could run further transformations and analysis on it.
+By contrast, pivot table worksheets in Excel or Google Sheets are decidedly _not_ first-class citizens. Far too often, I had to manually copy and paste an Excel or Google Sheets pivot table into a new worksheet, just so I could run further transformations and analysis on it.
 
 </aside>
 
@@ -637,15 +623,11 @@ OK, let's say you wanted to rename that `pings_sum` column to the cleaner, short
 
 OK, so we want to rename the `pings_sum` column from the dataframe above so it becomes `pings`.
 
-### Code for playing along
-
-It's actually just one line of code:
+We do that like this:
 
 `rename!(hubble_pings_weekly, :pings_sum => :pings)`
 
-And here's the result---if you're playing along, you'll need to enter `hubble_pings_weekly` followed by the return/Enter key into your terminal to see it.
-
-### Julia output
+We get:
 
 ```
 2×2 DataFrame
