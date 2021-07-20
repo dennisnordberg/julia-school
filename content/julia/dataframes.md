@@ -1,11 +1,11 @@
 ---
 title: How to use dataframes in Julia
-date: 2021-07-20 12:57:22+11:00
+date: 2021-07-21 00:57:22+11:00
 seoTitle: Julia dataframes tutorial
 description: "Julia dataframes let you do anything you want: pivot tables, data cleaning, table joins, filtering, and more, all with a nice clean syntax."
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.6.1
+version: 1.6.2
 ---
 
 ## What are dataframes?
@@ -27,9 +27,9 @@ In this tutorial, we're going to be using a small dataframe of NASA inventory. T
 
 We'll call the dataframe `inventory`.
 
-It will have three columns: `item`, `quantity`, and `description`.
+It will have three columns: `item`, `id`, and `kind`.
 
-## If you want to play along
+## Installing Julia
 
 If you want to play along (as opposed to just reading through this tutorial), you'll need to [download, install, and run Julia](../setup/) if you haven't already.
 
@@ -45,13 +45,13 @@ Onwards!
 
 The first dataframes-specific thing we need to is to install the DataFrames package. This is a one-time task.
 
-The easiest way to do this is to type the `]` (right square bracket, located above the return/Enter key on your keyboard) into the Julia terminal.
+The easiest way to do this is to input `]` (right square bracket, located above the return/Enter key on your keyboard) into the Julia terminal.
 
 This changes the `julia>` prompt we saw above into one that says:
 
 <code class="julia-pkg">pkg></code>
 
-This prompt will be blue in colour.
+This prompt will be blue / purple in colour.
 
 This means we are now in Julia's package manager (hence the abbreviation <code class="julia-pkg">pkg</code>
 ). We can install packages with a lot less typing in here (compared to at the green `julia>` prompt).
@@ -92,17 +92,17 @@ inventory = DataFrame(
 		"%Lunar Rover",
 		"30% Sun Filter"
 	],
-	quantity = [
-		3,
-		1,
-		12,
-		100
+	id = [
+		100,
+		101,
+		102,
+		103
 	],
-	description = [
-		"mars buggy",
-		"venus spaceship",
-		"Neil's used car",
-		"Sun filter"
+	kind = [
+		"rover",
+		"spaceship",
+		"rover",
+		"Sun Filter"
 	]
 )
 ```
@@ -125,13 +125,13 @@ We get:
 
 ```
 4×3 DataFrame
-│ Row │ item           │ quantity │ description     │
-│     │ String         │ Int64    │ String          │
-├─────┼────────────────┼──────────┼─────────────────┤
-│ 1   │ Mars Rover     │ 3        │ mars buggy      │
-│ 2   │ Venus Explorer │ 1        │ venus spaceship │
-│ 3   │ %Lunar Rover   │ 12       │ Neil's used car │
-│ 4   │ 30% Sun Filter │ 100      │ Sun filter      │
+ Row │ item            id     kind
+     │ String          Int64  String
+─────┼───────────────────────────────────
+   1 │ Mars Rover        100  rover
+   2 │ Venus Explorer    101  spaceship
+   3 │ %Lunar Rover      102  rover
+   4 │ 30% Sun Filter    103  Sun Filter
 ```
 
 Let's quickly talk through what we see above.
@@ -140,11 +140,11 @@ Let's quickly talk through what we see above.
 
 The first words of the output above, `4x3 DataFrame` says that we have a 4-row, 3-column dataframe. Simple enough.
 
-Next, we have the column headers, `Row`, `item`, `quantity`, and `description`.
+Next, we have the column headers, `Row`, `item`, `id`, and `kind`.
 
 The first of these, `Row`, is not something we asked for, though it is very useful. It's a column of row numbers that Julia generates automatically. But don't worry, they're not part of the dataframe proper, nor will they show up in CSV exports and so forth.
 
-The next column headers, `item`, `quantity`, and `description` are those we supplied to Julia in our code above.
+The next column headers, `item`, `id`, and `kind` are those we supplied to Julia in our code above.
 
 <aside>
 
@@ -164,17 +164,17 @@ Our first "real" column, `item`, has the **type** `String`.
 
 This means that anything that goes in this column will be treated as text.
 
-The next column, `quantity`, has the type `Int64`. Although this might look weird, it just means "integer" (a whole number, not a decimal). The `64` just refers to 64 bit, which means huge numbers can be stored here. "Huge numbers" is my technical term for the range of integers between `-2^63` and `2^63 - 1`.
+The next column, `id`, has the type `Int64`. Although this might look weird, it just means "integer" (a whole number, not a decimal). The `64` just refers to 64 bit, which means huge numbers can be stored here. "Huge numbers" is my technical term for the range of integers between `-2^63` and `2^63 - 1`.
 
-Finally, the last column, `description`, is another `String`-type column, the same as the `item` column.
+Finally, the last column, `kind`, is another `String`-type column, the same as the `item` column.
 
-And finally, we have the actual data.
+And finally, we have the actual data within the rows and columns of our dataframe.
 
 ## How to "find and replace" in a Julia dataframe
 
 As mentioned above, I've deliberately included some typos in the `inventory` dataframe, so we can practise "find and replace".
 
-In the `description` column, `mars` should be `Mars`, and `venus` should be `Venus`.
+In the `kind` column, `rover` should be `Rover`, and `spaceship` should be `Spaceship`.
 
 Let's clean that up.
 
@@ -182,41 +182,45 @@ Here's how you do that:
 
 ```
 for i in eachrow(inventory)
-	i[:description] = replace(i[:description], "mars"=>"Mars")
-	i[:description] = replace(i[:description], "venus"=>"Venus")
+	i[:kind] = replace(i[:kind], "rover"=>"Rover")
+	i[:kind] = replace(i[:kind], "spaceship"=>"Spaceship")
 end
+```
+
+To see the results, we call up our dataframe again:
+
+`inventory`
+
+We get:
+
+```
+4×3 DataFrame
+ Row │ item            id     kind
+     │ String          Int64  String
+─────┼───────────────────────────────────
+   1 │ Mars Rover        100  Rover
+   2 │ Venus Explorer    101  Spaceship
+   3 │ %Lunar Rover      102  Rover
+   4 │ 30% Sun Filter    103  Sun Filter
 ```
 
 Let's walk through that code line-by-line:
 
-> `for i in eachrow(inventory)` Here we open up a "for loop", where we'll iterate over each row in the `inventory` dataframe.
+> `for i in eachrow(inventory)`
+>
+> Here we open up a "for loop", where we'll iterate over each row in the `inventory` dataframe.
 
-> `i[:description] = replace(i[:description], "mars"=>"Mars")` Here we replace any instance of `mars` in the `description` column, and replace it with the correctly-cased `Mars`.
+> `i[:kind] = replace(i[:kind], "rover"=>"Rover")`
+>
+> Here we replace any instance of `rover` in the `description` column, and replace it with the correctly-cased `Rover`.
 
-Talking through the code above, it says "for each row in the `inventory` dataframe, within the `description` column, replace `mars` with `Mars` (because grammar) and `venus` with `Venus` (also because grammar).
+> `i[:kind] = replace(i[:kind], "spaceship"=>"Spaceship")`
+>
+> Here we do a similar replacement, but this time we're swapping out "spaceship" for "Spaceship".
 
-Alright, so you've typed or copied and pasted the code above into Julia and hit the return/Enter key.
-
-But now all we see is the Julia prompt again:
-
-`julia>`
-
-What gives? Well, if you type `inventory` and hit the return/Enter key, you'll see that the planet names in our `description` column now start with a capital letter.
-
-### Julia output
-
-```
-4×3 DataFrame
-│ Row │ item           │ quantity │ description     │
-│     │ String         │ Int64    │ String          │
-├─────┼────────────────┼──────────┼─────────────────┤
-│ 1   │ Mars Rover     │ 3        │ Mars buggy      │
-│ 2   │ Venus Explorer │ 1        │ Venus spaceship │
-│ 3   │ %Lunar Rover   │ 12       │ Neil's used car │
-│ 4   │ 30% Sun Filter │ 100      │ Sun filter      │
-```
-
-So Julia _has_ done the requested find and replace, you just have to ask it to show you the output (which we did by typing `inventory` and hitting return/Enter).
+> `end`
+>
+> Here we close the "for loop" we started in the first line.
 
 OK, moving on.
 
@@ -224,17 +228,16 @@ There's one more typo in the `inventory` dataframe.
 
 In the `item` column, `%Lunar Rover` should be `Lunar Rover`.
 
-Let's clean that up too. But we'll need to be careful---we don't want to remove the percentage sign from `30% Sun Filter`. After all, it's a thirty per cent sun filter, and that's how it should stay.
+Let's clean that up too. But we'll need to be careful---we don't want to remove the percentage sign from `30% Sun Filter`.
 
-Read on to see how to do this. We're going to use regex.
+Read on to see how to do this.
 
 ## How to "find and replace" with regex in a Julia dataframe
 
 We're going to use regex (regular expressions) to do our find and replace.
 
-It looks like this:
+The code looks like this:
 
-### Code for playing along
 
 ```
 for i in eachrow(inventory)
@@ -242,42 +245,53 @@ for i in eachrow(inventory)
 end
 ```
 
-In the code above, you can see in the second line that we use `r` at the beginning of the text to find, i.e. `r"^%"`.
+After inputting that code, we call up our dataframe again:
 
-The `r` simply means we are using regex.
+`inventory`
 
-Then we have double quote marks surrounding our regular expression.
-
-The regular expression itself consists of a caret i.e. `^` and the character we want to match, the `%` sign.
-
-If you know regex, you'll know that the caret (in this context) means "the start of the string".
-
-So `^%` means "a percentage sign at the start of a string". Any percentage signs _not_ at the start of the string will not be matched. So our regex won't match `30% Sun Filter`---just as we intended.
-
-Moving on, we have a "fat arrow" i.e. `=>`. This signifies that whatever comes next is the text to replace our match(es) with.
-
-In this particular case, our replace text is blank i.e. `""`, because we want to replace the percentage sign at the start of `%Lunar Rover` with nothing, i.e. delete it.
-
-Thus, we end up with:
-
-### Julia output
+We get:
 
 ```
 4×3 DataFrame
-│ Row │ item           │ quantity │ description     │
-│     │ String         │ Int64    │ String          │
-├─────┼────────────────┼──────────┼─────────────────┤
-│ 1   │ Mars Rover     │ 3        │ Mars buggy      │
-│ 2   │ Venus Explorer │ 1        │ Venus spaceship │
-│ 3   │ Lunar Rover    │ 12       │ Neil's used car │
-│ 4   │ 30% Sun Filter │ 100      │ Sun filter      │
+ Row │ item            id     kind
+     │ String          Int64  String
+─────┼───────────────────────────────────
+   1 │ Mars Rover        100  Rover
+   2 │ Venus Explorer    101  Spaceship
+   3 │ Lunar Rover       102  Rover
+   4 │ 30% Sun Filter    103  Sun Filter
 ```
 
-There we are---all cleaned up for the ball!
+Let's walk through that code line-by-line.
+
+> `for i in eachrow(inventory)`
+>
+> Here we start a "for loop" over the `inventory` dataframe. We use `eachrow()`, a function that ships with Julia's `DataFrames.jl` package, to iterate over the rows.
+
+> `i[:item] = replace(i[:item], r"^%"=>"")`
+>
+> This line instructs Julia to conduct a find-and-replace on each row of the `item` column, using Julia's `replace()` function. The actual "find and replace" part comes in the form of the second argument, `r"^%"=>""`. It starts with the letter `r`, to signify that we are using regex. Next, we have double quotes surrounding our regex: `"^%"`. The caret, `^` is a regex character which means "match the beginning of the string". The percentage sign, `%`, is a literal match for a percentage sign. Then we have a fat arrow, `=>` which tells Julia what the replacement should be. And finally, we have empty double quote marks, `""`, which tells Julia to replace our regex match with nothing, i.e. delete it. We want to replace the percentage sign at the start of `%Lunar Rover` with nothing---that is, delete it.
+
+> `end`
+>
+> Finally, we close the "for loop" we started on the first line.
 
 ## How to filter a dataframe in Julia
 
-Let's say, for the dataframe shown immediately above this section, we only want the rows which mention "Rover".
+Here's our spruced-up `inventory` dataframe again:
+
+```
+4×3 DataFrame
+ Row │ item            id     kind
+     │ String          Int64  String
+─────┼───────────────────────────────────
+   1 │ Mars Rover        100  Rover
+   2 │ Venus Explorer    101  Spaceship
+   3 │ Lunar Rover       102  Rover
+   4 │ 30% Sun Filter    103  Sun Filter
+```
+
+Let's say we want only the rows which mention "Rover".
 
 If you're just joining us now, you can create the dataframe by inputting the following at the Julia prompt:
 
@@ -289,22 +303,22 @@ inventory = DataFrame(
 		"Lunar Rover",
 		"30% Sun Filter"
 	],
-	quantity = [
-		3,
-		1,
-		12,
-		100
+	id = [
+		100,
+		101,
+		102,
+		103
 	],
-	description = [
-		"Mars buggy",
-		"Venus spaceship",
-		"Neil's used car",
-		"Sun filter"
+	kind = [
+		"Rover",
+		"Spaceship",
+		"Rover",
+		"Sun Filter"
 	]
 )
 ```
 
-Now, to get just the rows with "Rover" in the `item` column, use this code:
+Now, to make a new dataframe named `rovers` containing just the rows with "Rover" in the `item` column, use this code:
 
 ```
 rovers = filter(
@@ -317,11 +331,11 @@ We get:
 
 ```
 2×3 DataFrame
-│ Row │ item        │ quantity │ description              │
-│     │ String      │ Int64    │ String                   │
-├─────┼─────────────┼──────────┼──────────────────────────┤
-│ 1   │ Mars Rover  │ 3        │ Mars buggy               │
-│ 2   │ Lunar Rover │ 12       │ Neil's used car          │
+ Row │ item         id     kind
+     │ String       Int64  String
+─────┼────────────────────────────
+   1 │ Mars Rover     100  Rover
+   2 │ Lunar Rover    102  Rover
 ```
 
 Let's walk through that code line by line:
@@ -336,9 +350,7 @@ Let's walk through that code line by line:
 >
 > If you look closely, our rule is actually a function. It's not a named function like `print()`.
 >
-> Rather, it's an "anonymous" function, because it doesn't have a name. Specifically, it's a "stabby lambda" anonymous function. "Stabby" because it has a stabby arrow, like this:
->
-> `->`
+> Rather, it's an "anonymous" function, because it doesn't have a name. Specifically, it's a "stabby lambda" anonymous function. "Stabby" because it has a stabby arrow, `->`.
 >
 > And the reason we're using an anonymous rather than named function is because we're only using it once, and it's more concise this way. Whereas we might use our `print` function every second day, so it makes sense for it to have a name.
 >
@@ -358,11 +370,9 @@ Did you know Julia can join two tables just like SQL?
 
 ### Creating our second dataframe
 
-Let's say we have another table which lists each `item` and its corresponding SKU (stock keeping unit).
+Let's say we have another dataframe named `sku` which lists each `item` and its corresponding `sku` (stock keeping unit).
 
-If you want to play along, here's the Julia code to copy and paste into your terminal:
-
-### Code for playing along
+Here's the Julia code to create the `sku` dataframe:
 
 ```
 sku = DataFrame(
@@ -381,9 +391,7 @@ sku = DataFrame(
 )
 ```
 
-And here's the Julia dataframe output:
-
-### Julia output
+We get:
 
 ```
 4×2 DataFrame
@@ -396,54 +404,80 @@ And here's the Julia dataframe output:
 │ 4   │ 30% Sun Filter │ 77254 │
 ```
 
-OK, so we have a 4-row, 2-column dataframe. It's called `sku`, because that's what we named it in the Julia code above.
+And here's the code to create our original `inventory` dataframe:
 
-Moving on, each `item` is stored as plain text (i.e. a `String`), and each `sku` is an integer (specifically, an `Int64` integer).
+```
+inventory = DataFrame(
+	item = [
+		"Mars Rover",
+		"Venus Explorer",
+		"Lunar Rover",
+		"30% Sun Filter"
+	],
+	id = [
+		100,
+		101,
+		102,
+		103
+	],
+	kind = [
+		"Rover",
+		"Spaceship",
+		"Rover",
+		"Sun Filter"
+	]
+)
+```
 
-### Doing the actual join
+We get:
 
-Now it's time to combine (join) this new dataframe with the dataframe from earlier, `inventory`.
+```
+4×3 DataFrame
+ Row │ item            id     kind
+     │ String          Int64  String
+─────┼───────────────────────────────────
+   1 │ Mars Rover        100  Rover
+   2 │ Venus Explorer    101  Spaceship
+   3 │ Lunar Rover       102  Rover
+   4 │ 30% Sun Filter    103  Sun Filter
+```
 
-It's actually really easy to do this in Julia. It's only one line of code:
+Let's join those two dataframes in a new dataframe named `inventory_sku`. It's only one line of code:
 
-### Code for playing along
+`inventory_sku = outerjoin(inventory, sku, on = :item)`
 
-`inventory_sku = join(inventory, sku, on = :item)`
-
-Let's walk through this code. First, we create a new variable, `inventory_sku` that we'll use to store the joined table.
-
-Next, `join()` is the function, the instruction to Julia that we want to join two dataframes together.
-
-The first two items (known as "arguments") inside the `join()` function are the two dataframes we want to join, `inventory` and `sku`. Whichever dataframe you mention first inside the `join()` function will go on the left of our joined dataframe. The unique columns from the other dataframe will go on the right.
-
-The third "argument" inside the `join()` function is this code: `on = :item`.
-
-This simply means that the `:item` column is the one we're using to match the correct rows from each dataframe. In SQL and other database languages, this is called a "primary key".
-
-And here's our output:
-
-### Julia output
+We get:
 
 ```
 4×4 DataFrame
-│ Row │ item           │ quantity │ description     │ sku   │
-│     │ String         │ Int64    │ String          │ Int64 │
-├─────┼────────────────┼──────────┼─────────────────┼───────┤
-│ 1   │ Mars Rover     │ 3        │ Mars buggy      │ 34566 │
-│ 2   │ Venus Explorer │ 1        │ Venus spaceship │ 78945 │
-│ 3   │ Lunar Rover    │ 12       │ Neil's used car │ 15179 │
-│ 4   │ 30% Sun Filter │ 100      │ Sun filter      │ 77254 │
+ Row │ item            id     kind        sku
+     │ String          Int64  String      Int64
+─────┼──────────────────────────────────────────
+   1 │ Mars Rover        100  Rover       34566
+   2 │ Venus Explorer    101  Spaceship   78945
+   3 │ Lunar Rover       102  Rover       15179
+   4 │ 30% Sun Filter    103  Sun Filter  77254
 ```
 
-Pretty cool, right?
+Let's walk through this code. Since it's only one line of code, we'll break it up into parts to discuss.
+
+First, we create a new variable, `inventory_sku` that we'll use to store the joined table.
+
+Next, `outerjoin()` is the function, the instruction to Julia that we want to join two dataframes together. The types of join you can do are `innerjoin`, `leftjoin`, `rightjoin`, `outerjoin`, `semijoin`, `antijoin`, or `crossjoin`. I chose `outerjoin`, but since our two dataframes are a perfect match, we could have used `innerjoin`, `leftjoin`, or `rightjoin` and received the same result.
+
+The first two items (known as "arguments") inside the `join()` function are the two dataframes we want to join, `inventory` and `sku`. Whichever dataframe you mention first inside the `join()` function will go on the left of our joined dataframe. The unique columns from the other dataframe will go on the right.
+
+The third "argument" inside the `join()` function is `on = :item`.
+
+This simply means that the `:item` column is the one we're using to match the correct rows from each dataframe. In SQL and other database languages, this is called a "primary key".
 
 ### More complex dataframe joins in Julia
 
 Now, this was an easy join. We had four items in `inventory` and the same four items in `sku`. There were no missing rows, in other words.
 
-In addition, this join was super easy because the `item` column was identical in both dataframes.
+In addition, this join was super easy because the `item` column had the same name in both dataframes.
 
-If it had been named `item` in one dataframe, and `item_name` in the other, we would have had to rename one column.
+If it had been named `item` in one dataframe, and `item_name` in the other, we would have had to rename one column. I'll cover this a bit later on. First up though: pivot tables.
 
 ## How to use pivot tables in Julia dataframes
 
@@ -642,9 +676,7 @@ We get:
 
 Julia makes it trivial to add a new column to your dataframe, especially if you already have the data in array form.
 
-Let's jump to an example. We'll take a cleaned up version of our `inventory` dataframe from earlier in this tutorial, and add a new column called `condition`, where the values can be `Excellent`, `Good`, `Fair` or `Poor`.
-
-Here's the code to create the `inventory` dataframe without the `condition` column:
+For example, if we have the following dataframe we've been using for some of this tutorial:
 
 ```
 inventory = DataFrame(
@@ -654,56 +686,62 @@ inventory = DataFrame(
 		"Lunar Rover",
 		"30% Sun Filter"
 	],
-	quantity = [
-		3,
-		1,
-		12,
-		100
+	id = [
+		100,
+		101,
+		102,
+		103
 	],
-	description = [
-		"Buggy",
+	kind = [
+		"Rover",
 		"Spaceship",
-		"Neil's car",
-		"Sun filter"
+		"Rover",
+		"Sun Filter"
 	]
 )
 ```
 
-Once you enter the above code into your terminal, you get:
+... it looks like this:
 
 ```
 4×3 DataFrame
- Row │ item            quantity  description
-     │ String          Int64     String
-─────┼───────────────────────────────────────
-   1 │ Mars Rover             3  Buggy
-   2 │ Venus Explorer         1  Spaceship
-   3 │ Lunar Rover           12  Neil's car
-   4 │ 30% Sun Filter       100  Sun filter
+ Row │ item            id     kind
+     │ String          Int64  String
+─────┼───────────────────────────────────
+   1 │ Mars Rover        100  Rover
+   2 │ Venus Explorer    101  Spaceship
+   3 │ Lunar Rover       102  Rover
+   4 │ 30% Sun Filter    103  Sun Filter
 ```
+
+Let's say we want to add a new column called `condition`, where the values can be `Excellent`, `Fair` or `Poor`.
 
 And let's say you already have an array with the condition of each item:
 
-`condition = ["Fair", "Fair", "Fair", "Good"]`
+`condition = ["Fair", "Excellent", "Fair", "Poor"]`
 
-To add this array as a column to our `inventory` dataframe, you do this:
+To add this `condition` array as a column to our `inventory` dataframe, you do this:
 
 `inventory[!, :condition] = condition`
 
-We'll walk through that code in a second, but after we run the above line, and then call up `inventory` again, we'll see the expanded `inventory` dataframe, complete with its new `condition` column:
+When we call up our newly-expanded dataframe:
+
+`inventory`
+
+We get:
 
 ```
 4×4 DataFrame
- Row │ item            quantity  description  condition
-     │ String          Int64     String       String
-─────┼──────────────────────────────────────────────────
-   1 │ Mars Rover             3  Buggy        Fair
-   2 │ Venus Explorer         1  Spaceship    Fair
-   3 │ Lunar Rover           12  Neil's car   Fair
-   4 │ 30% Sun Filter       100  Sun filter   Good
+ Row │ item            id     kind        condition
+     │ String          Int64  String      String
+─────┼──────────────────────────────────────────────
+   1 │ Mars Rover        100  Rover       Fair
+   2 │ Venus Explorer    101  Spaceship   Excellent
+   3 │ Lunar Rover       102  Rover       Fair
+   4 │ 30% Sun Filter    103  Sun Filter  Poor
 ```
 
-Walking through the `inventory[!, :condition] = condition` code now, we're telling Julia to add a new column (`:condition`) to each row (`!`) of the `inventory` dataframe, and that it should get this data from the array named `condition` (on the right hand side of the equals sign).
+Let's walk through that code. First, we're telling Julia to add a new column (`:condition`) to each row (`!`) of the `inventory` dataframe, and that it should get this data from the array named `condition` (on the right hand side of the equals sign).
 
 ## How to import a CSV as a dataframe in Julia
 
@@ -747,11 +785,11 @@ First, tell Julia, if you haven't already, that we will be:
 
 This loads the DataFrames package into your workspace.
 
-Now, assuming we want our new dataframe to be called `df` (a standard way to name dataframes in simple examples, although you can choose another name), then we input this:
+Now, assuming we want our new dataframe to be called `df`, we input this:
 
 `df = DataFrame([space_companies], [:space_brands])`
 
-... and we get the following dataframe:
+We get:
 
 ```
 4×1 DataFrame
@@ -764,18 +802,28 @@ Now, assuming we want our new dataframe to be called `df` (a standard way to nam
    4 │ Sierra Nevada Corporation
 ```
 
-I deliberately named the column `space_brands` so it would be more obvious in the code above as to where we are referencing our array (`space_companies`) and where we are naming our column (`space_brands`).
-
 Let's walk through the code above now.
 
-> `df =` We are creating a new variable, which we have named `df`.
+> `df =`
+>
+> We are creating a new variable, which we have named `df`.
 
-> `DataFrame(` Here we tell Julia to create a dataframe, and we open the brackets, inside of which we'll be configuring said dataframe.
+> `DataFrame(`
+>
+> Here we tell Julia to create a dataframe, and we open the brackets, inside of which we'll be configuring said dataframe.
 
-`[space_companies]` Here we're telling Julia which array (`space_companies`) we want to reference for our dataframe's content. Important: The array name must be inside square brackets `[]`. The reason why can be slightly confusing, but it's because Julia is expecting a list (otherwise known as an array) of array names, and just because we happen to only have one array (`space_companies`) in this example, doesn't mean Julia isn't able to handle more---and therefore, it expects an array of array names. If that's confusing then just remember to put square brackets around your array name.
+> `[space_companies]`
+>
+> Here we're telling Julia which array (`space_companies`) we want to reference for our dataframe's content. Important: The array name must be inside square brackets `[]`. The reason why can be slightly confusing, but it's because Julia is expecting a list (otherwise known as an array) of array names, and just because we happen to only have one array (`space_companies`) in this example, doesn't mean Julia isn't able to handle more---and therefore, it expects an array of array names. If that's confusing then just remember to put square brackets around your array name.
 
-> `,` We separate our array name from the next bit of config with a comma.
+> `,`
+>
+> We separate our array name from the next bit of config with a comma.
 
-> `[:space_brands]` Here we tell Julia what we want to name the column in our new dataframe. In this case, I've gone for `space_brands` as the column name, but we have to add some additional characters to the name. We first add a colon `:` to signify that this is a dataframes column name (it's part of the DataFrames standard). Next, we have to wrap the colon and column name in square brackets `[]`. So instead of `:space_brands`, we write `[:space_brands]`. The reason for the square brackets is that Julia needs to be ready for more than one array/column name combo, and therefore expects an array---even if you only have one array and column name.
+> `[:space_brands]`
+>
+> Here we tell Julia what we want to name the column in our new dataframe. In this case, I've gone for `space_brands` as the column name, but we have to add some additional characters to the name. We first add a colon `:` to signify that this is a dataframes column name (it's part of the DataFrames standard). Next, we have to wrap the colon and column name in square brackets `[]`. So instead of `:space_brands`, we write `[:space_brands]`. The reason for the square brackets is that Julia needs to be ready for more than one array/column name combo, and therefore expects an array---even if you only have one array and column name.
 
-> `)` Here we close the brackets we opened earlier.
+> `)`
+>
+> Here we close the brackets we opened earlier.
