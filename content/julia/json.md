@@ -1,10 +1,11 @@
 ---
 title: How to convert nested JSON to a dataframe or CSV in Julia
-date: 2021-07-06 22:55:59+11:00
+date: 2021-07-21 16:27:59+11:00
 seoTitle: "Nested JSON in Julia: How to convert to dataframe"
 description: You can't do it with one function, but you can do it!
 authors: ["Ron Erdos"]
 tableOfContents: true
+version: 1.6.2
 ---
 
 ## Inputs and outputs
@@ -44,52 +45,33 @@ This tutorial will show you how to do that using Julia. Let's get started!
 
 ## Converting the JSON to a string variable
 
-First, we need to escape the double quotes with a backslash, so that we can create this JSON as a string in Julia.
+First, we need to escape the double quotes, so that we can create this JSON as a string in Julia.
 
-I did this with a simple find and replace in VS Code, yielding:
+The easiest way to escape double quotes in Julia is to use triple double quotes at the start and end of the data.
+
+I've done that here, as well as storing the data inside a new variable I've called `spacex`. The code looks like this:
 
 ```
+spacex = """
 {
-    \"org\": \"SpaceX\",
-    \"id\": 123,
-    \"equipment\": [
+    "org": "SpaceX",
+    "id": 123,
+    "equipment": [
         {
-            \"launcher\": \"Falcon 1\",
-            \"max_payload\": 180
+            "launcher": "Falcon 1",
+            "max_payload": 180
         },
         {
-            \"launcher\": \"Falcon 9\",
-            \"max_payload\": 22800
+            "launcher": "Falcon 9",
+            "max_payload": 22800
         },
         {
-            \"launcher\": \"Falcon Heavy\",
-            \"max_payload\": 63800
+            "launcher": "Falcon Heavy",
+            "max_payload": 63800
         }
     ]
 }
-```
-
-Now let's create this as a Julia variable, `spacex`, by wrapping the escaped JSON in double quotes:
-
-```
-spacex = "{
-    \"org\": \"SpaceX\",
-    \"id\": 123,
-    \"equipment\": [
-        {
-            \"launcher\": \"Falcon 1\",
-            \"max_payload\": 180
-        },
-        {
-            \"launcher\": \"Falcon 9\",
-            \"max_payload\": 22800
-        },
-        {
-            \"launcher\": \"Falcon Heavy\",
-            \"max_payload\": 63800
-        }
-    ]
-}"
+"""
 ```
 
 So what are we working with here? What sort of variable is `spacex`?
@@ -263,9 +245,13 @@ Let's take a closer look at the `equipment` column. Let's make a variable called
 
 I've written a tutorial on [Julia dataframes](../dataframes/) if you're not familiar with them, but let's walk through this code briefly:
 
-> `equipment_col =` Here we're creating a new variable, `equipment_col` to use later.
+> `equipment_col =`
+>
+> Here we're creating a new variable, `equipment_col` to use later.
 
-> `df[!, :equipment]` From the dataframe named "df" (`df[]`), get all rows (signified with an exclamation mark `!`) in the `equipment` column (signified with a colon and then the column name: `:equipment`).
+> `df[!, :equipment]`
+>
+> From the dataframe named "df" (`df[]`), get all rows (signified with an exclamation mark `!`) in the `equipment` column (signified with a colon and then the column name: `:equipment`).
 
 So the value of our newly-created `equipment_col` variable is:
 
@@ -350,13 +336,21 @@ end
 
 Let's walk through that code line by line:
 
-> `for i in 1:length(equipment_col)` Here we are iterating over the number of items in our equipment column. In our SpaceX example, we have three rows (one each for Falcon 1, Falcon 9, and Falcon Heavy). So in our iterator, `i` will equal `1`, then `2`, and finally `3`. We'll use this changing value of `i` below to get our launcher names and their max payloads.
+> `for i in 1:length(equipment_col)`
+>
+> Here we are iterating over the number of items in our equipment column. In our SpaceX example, we have three rows (one each for Falcon 1, Falcon 9, and Falcon Heavy). So in our iterator, `i` will equal `1`, then `2`, and finally `3`. We'll use this changing value of `i` below to get our launcher names and their max payloads.
 
-> `push!(launchers_array, equipment_col[i]["launcher"])` Now we are adding (`push!`) the name of each launcher ("Falcon 1", "Falcon 9" etc) into our `launchers_array`. When `i` is equal to `1`, we are adding `equipment_col[1]["launcher"]`, which is equal to `"Falcon 1"`. When `i` is equal to `2`, we are adding `equipment_col[2]["launcher"]`, which equals `"Falcon 9"`. And finally, when `i` equals `3`, we're adding the launcher name (`"Falcon Heavy"`) from the third element in our `equipment_col`. If this is at all unclear, let me know and I'll do a tutorial just on this.
+> `push!(launchers_array, equipment_col[i]["launcher"])`
+>
+> Now we are adding (`push!`) the name of each launcher ("Falcon 1", "Falcon 9" etc) into our `launchers_array`. When `i` is equal to `1`, we are adding `equipment_col[1]["launcher"]`, which is equal to `"Falcon 1"`. When `i` is equal to `2`, we are adding `equipment_col[2]["launcher"]`, which equals `"Falcon 9"`. And finally, when `i` equals `3`, we're adding the launcher name (`"Falcon Heavy"`) from the third element in our `equipment_col`. If this is at all unclear, let me know and I'll do a tutorial just on this.
 
-> `push!(max_payloads_array, equipment_col[i]["max_payload"])` Here we're doing the same thing as the line above, but instead of adding launcher names into the launchers array, we're adding the maximum payload for each launcher into our `max_payloads_array`.
+> `push!(max_payloads_array, equipment_col[i]["max_payload"])`
+>
+> Here we're doing the same thing as the line above, but instead of adding launcher names into the launchers array, we're adding the maximum payload for each launcher into our `max_payloads_array`.
 
-> `end` Here we close the `for` loop we started a few lines earlier.
+> `end`
+>
+> Here we close the `for` loop we started a few lines earlier.
 
 Let's take a look at our new `launchers_array`:
 
