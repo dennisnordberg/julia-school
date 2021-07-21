@@ -182,25 +182,39 @@ array_1
  "Apollo"
  ```
 
-### Code walkthrough
+Let's walk through the example above bit by bit:
 
-Let's go through the example above bit by bit:
+> `array_1 =`
+>
+> Here we are re-assigning the array (named `array_1`) to the output of our code. This means it is a "destructive" outcome.
 
-> `array_1 =` Here we are re-assigning the array (named `array_1`) to the output of our code. This means it is a "destructive" outcome.
+> `replace.`
+>
+> This is the "find and replace" function in Julia. We use the `.` to signify that we want to apply our find and replace to each item in the array. In Julia, this is called "broadcasting" 🎙.
 
-> `replace.` This is the "find and replace" function in Julia. We use the `.` to signify that we want to apply our find and replace to each item in the array. In Julia, this is called "broadcasting" 🎙.
+> `(`
+>
+> Here, we open the function brackets, a necessary task.
 
-> `(` Here, we open the function brackets, a necessary task.
+> `array_1`
+>
+> Now we tell Julia which array to perform our "find and replace". In this case, it's our array named `array_1`.
 
-> `array_1` Now we tell Julia which array to perform our "find and replace". In this case, it's our array named `array_1`.
+> `"apollo"`
+>
+> Here's the "needle" we're looking for in the proverbial haystack. We're looking for all instances of `apollo`.
 
-> `"apollo"` Here's the "needle" we're looking for in the proverbial haystack. We're looking for all instances of `apollo`.
+> `=>`
+>
+> The "fat arrow" in Julia means, in this context, "transform". So we are transforming `"apollo"` into whatever comes after the fat arrow (which in this case, is `"Apollo"`)
 
-> `=>` The "fat arrow" in Julia means, in this context, "transform". So we are transforming `"apollo"` into whatever comes after the fat arrow (which in this case, is `"Apollo"`)
+> ``"Apollo"``
+>
+> Here's what we want our "find and replace" matches to become.
 
-> ``"Apollo"`` Here's what we want our "find and replace" matches to become.
-
-> `)` Here we close the function brackets, a necessary task.
+> `)`
+>
+> Here we close the function brackets, a necessary task.
 
 ## How to find and replace strings using regex in Julia arrays
 
@@ -229,27 +243,41 @@ We get our desired result:
  "50% Sun Filter"
  ```
 
-### Code walkthrough
-
 The `replace.()` code is virtually the same as in the previous, non-regex example; the only difference here is that we've added regex.
 
 Let's walk through the code bit by bit:
 
-> `array_2 =` Here we are re-assigning the array (named `array_2`) to the output of our code. This means it is a "destructive" outcome.
+> `array_2 =`
+>
+> Here we are re-assigning the array (named `array_2`) to the output of our code. This means it is a "destructive" outcome.
 
-> `replace.` Here's our Julia "find and replace" function again. We're again using our trusty `.` to signify that we want to apply our find and replace to each item in the array.
+>`replace.`
+>
+> Here's our Julia "find and replace" function again. We're again using our trusty `.` to signify that we want to apply our find and replace to each item in the array.
 
-> `(` Here, we open the function brackets, a necessary task.
+> `(`
+>
+> Here, we open the function brackets, a necessary task.
 
->`array_2`  Now we tell Julia which array to perform our "find and replace". In this case, it's an array named `array_2`.
+>`array_2`
+>
+> Now we tell Julia which array to perform our "find and replace". In this case, it's an array named `array_2`.
 
-> `r"^%"` Here's the "needle" we're looking for in the proverbial haystack. This is what we want Julia to match. The `r` before the first double quote tells Julia we're using regex. The double quotes contain the "needle"; the match itself. The caret `^`, when used this way in regex, means "the start of the string". And finally, we have the percentage sign itself. (Remember, we're trying to remove leading percentage signs from elements in our array). Putting that all together, we're looking for a percentage sign at the start of a string.
+> `r"^%"`
+>
+> Here's the "needle" we're looking for in the proverbial haystack. This is what we want Julia to match. The `r` before the first double quote tells Julia we're using regex. The double quotes contain the "needle"; the match itself. The caret `^`, when used this way in regex, means "the start of the string". And finally, we have the percentage sign itself. (Remember, we're trying to remove leading percentage signs from elements in our array). Putting that all together, we're looking for a percentage sign at the start of a string.
 
-> `=>` The "fat arrow" in Julia means, in this context, "transform". So we are transforming our regex match into whatever comes after the fat arrow (see below).
+> `=>`
+>
+> The "fat arrow" in Julia means, in this context, "transform". So we are transforming our regex match into whatever comes after the fat arrow (see below).
 
-> `""` The empty double quotes are, in this context, how you replace something with nothing, which is what we're doing here; replacing a leading `%` with nothing.
+> `""`
+>
+> The empty double quotes are, in this context, how you replace something with nothing, which is what we're doing here; replacing a leading `%` with nothing.
 
-> `)` Here we close the function brackets.
+> `)`
+>
+> Here we close the function brackets.
 
 ## How to get the union of two arrays in Julia
 

@@ -625,7 +625,7 @@ The third and final argument in the `by()` function is `:pings => sum`.
 
 This tells Julia to take a given column, `:pings`, in the source dataframe and to `sum` them in our pivot table.
 
-Take a look at our pivot table below---if you're playing along, type `hubble_pings_weekly` into your terminal and hit return/Enter:
+Take a look at our pivot table below---if you're playing along, input `hubble_pings_weekly` into your terminal.
 
 We get:
 
