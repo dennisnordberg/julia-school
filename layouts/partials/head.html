@@ -44,10 +44,6 @@
         <script src="/scripts/custom.js"></script>
     {{ end }}
 
-    <!--Plausible Analytics-->
-    <script async defer data-domain="julia.school" src="https://plausible.io/js/plausible.js"></script>
-    <!--End Plausible Analytics-->
-
 	{{ with .Site.Params.scripts }}
 		{{ range . }}
 			<script src="{{ . }}"></script>
