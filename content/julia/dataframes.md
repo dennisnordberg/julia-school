@@ -1,11 +1,11 @@
 ---
 title: How to use dataframes in Julia
-date: 2021-07-21 00:57:22+11:00
+date: 2021-11-11 20:11:22+11:00
 seoTitle: Julia dataframes tutorial
 description: "Julia dataframes let you do anything you want: pivot tables, data cleaning, table joins, filtering, and more, all with a nice clean syntax."
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.6.2
+version: 1.6.3
 ---
 
 ## What are dataframes?
@@ -61,6 +61,8 @@ Go ahead and add the DataFrames package by inputting the line below:
 `add DataFrames`
 
 Julia's package manager will do its thing and install the DataFrames package for you.
+
+We're using `DataFrames.jl` version v1.2.2 in this tutorial.
 
 You'll be taken back to the package manager prompt:
 
@@ -604,24 +606,29 @@ We're going to use that `iso_week` column to pivot our data to get our weekly pi
 The Julia code to make a pivot table is quite simple:
 
 ```
-hubble_pings_weekly = by(
-	hubble_pings,
-	:iso_week,
+hubble_pings_weekly = combine(
+	groupby(hubble_pings, :iso_week), 
 	:pings => sum
-)
+	)
 ```
 
-Let's walk through this code. First, we tell Julia to store the pivot table in a new variable, `hubble_pings_weekly`.
+Let's walk through this code.
 
-Then we use the inbuilt `by()` function to create the actual pivot table.
+First, we tell Julia that we want to store our forthcoming pivot table in a new variable, `hubble_pings_weekly`.
 
-Inside `by()`, we use three arguments.
+Next, we use the `combine()` function---this is built in to the `DataFrames.jl` Julia package.
 
-The first of these is `hubble_pings`. This tells Julia the name of the source dataframe we want to pivot.
+Inside `combine()`, we're using two arguments.
 
-The second argument is `:iso_week`. This is the column in the source dataframe we want to use for grouping.
+The first is another function, `groupby()` (also built in to `DataFrames.jl`).
 
-The third and final argument in the `by()` function is `:pings => sum`.
+So we're using a function---`groupby()`---inside another function, `combine()`. `groupby()` is therefore a _nested function_.
+
+Inside the nested function, `groupby()`, we use two arguments. The first is `hubble_pings`. This tells Julia the name of the source dataframe we want to pivot.
+
+The second argument inside `groupby()` is `:iso_week`. This tells Julia the column in the source dataframe we want to use for grouping.
+
+Okay, so that's `groupby()` done and dusted. Now we need to include the final argument inside `combine()`. We need to tell `DataFrames.jl` _how_ we want to combine the data. We do so with the following argument: `:pings => sum`.
 
 This tells Julia to take a given column, `:pings`, in the source dataframe and to `sum` them in our pivot table.
 
@@ -767,7 +774,7 @@ Once we've installed the `CSV.jl` package already (see above section on writing 
 
 Now we can import a CSV as a dataframe into Julia like this:
 
-`df = CSV.File("my-file.csv") |> DataFrame`
+`df = CSV.read("my-file.csv", DataFrame)`
 
 In the code above, we're telling Julia that we want to create a new dataframe, and that we want to call it `df`. (You can name it whatever you want, though.)
 
@@ -775,15 +782,15 @@ Next, we tell Julia that we have a CSV file, and where to find it. In the exampl
 
 However, if the CSV were in a different folder, you could reference it relative to the Julia script. For example, if the CSV is one folder higher than the Julia script, on a Mac you'd write this:
 
-`df = CSV.File("../my-file.csv") |> DataFrame`
+`df = CSV.read("../my-file.csv", DataFrame)`
 
 (The two dots `..` signify the parent directory in Unix and Mac systems.)
 
 You can also reference the absolute location of the CSV. For instance, if the CSV were on my Mac desktop, I'd write this:
 
-`df = CSV.File("/Users/ron/Desktop/my-file.csv") |> DataFrame`
+`df = CSV.read("/Users/ron/Desktop/my-file.csv", DataFrame)`
 
-Finally, the `|> DataFrame` bit tells Julia to create a dataframe from the CSV.
+Finally, the `, DataFrame` "argument" tells Julia to create a dataframe from the CSV.
 
 ## How to convert an array into a dataframe in Julia
 
