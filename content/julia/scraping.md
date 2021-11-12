@@ -1,11 +1,11 @@
 ---
 title: Scraping web pages with Julia and the HTTP and Gumbo packages
-date: 2020-08-05 12:31:32+11:00
+date: 2021-11-12 23:04:32+11:00
 seoTitle: "Scraping web pages with Julia HTTP & Gumbo: Tutorial"
 description: Julia can be used for fast web scraping, not just data analysis.
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.4.2
+version: 1.6.3
 ---
 
 Do you want to crawl and scrape web pages with the Julia language? This tutorial will show you how.
@@ -237,7 +237,9 @@ Well, we need to add `.root` to `r_parsed` to start working with it. So we'll be
 
 Since we want the `<head>` section to start with, we'll use this command:
 
-`head = r_parsed.root[1]`:
+`head = r_parsed.root[1]`
+
+We get:
 
 ```
 HTMLElement{:head}:<head>
@@ -400,9 +402,13 @@ Now we can get the status code:
 
 `example_com_404.status`
 
-... and we see the correct result in our terminal:
+... and we see in the first few lines of our terminal output, that the status code is "404 Not Found":
 
-`404`
+```
+HTTP.Messages.Response:
+"""
+HTTP/1.1 404 Not Found
+```
 
 ### Getting the status code of a 500 page
 
@@ -410,23 +416,27 @@ When pages cannot be loaded due to a server error, there's a good chance it has 
 
 For example, this page has a (deliberate) `500` error:
 
-`http://getstatuscode.com/500`
+`https://getstatuscode.com/500`
 
 Similarly to the `404` example above, we need to use the `status_exception=false` argument in our code:
 
-`getstatuscode_500 = HTTP.head("http://getstatuscode.com/500", status_exception=false)`
+`get_status_code_500 = HTTP.head("https://getstatuscode.com/500", status_exception=false)`
 
 ... so that we can ask for the status code:
 
-`getstatuscode_500.status`
+`get_status_code_500.status`
 
-... and get the right answer:
+... and get the right answer in the first few lines of our terminal output:
 
-`500`
+```
+HTTP.Messages.Response:
+"""
+HTTP/1.1 500 Internal Server Error
+```
 
-By contrast, if we leave out the `status_exception=false` bit:
+By contrast, if we leave out the `status_exception=false` argument:
 
-`getstatuscode_500 = HTTP.head("http://getstatuscode.com/500")`
+`get_status_code_500 = HTTP.head("https://getstatuscode.com/500")`
 
 ... then we get the same sort of error we saw earlier in our 404 example:
 
@@ -434,35 +444,76 @@ By contrast, if we leave out the `status_exception=false` bit:
 
 ### Getting the status code of a 301 redirect
 
-If you want to know which pages on a website have been 301 redirected, this also requires a _different_ bit of additional code.
+If you want to know which pages on a website have been 301 redirected, we'll need to use `HTTP.get()` rather than `HTTP.head()`. The latter doesn't work with 301 (or 302) redirects.
 
-For example, let's say you want the status code for `http://balloon.com/`. That page 301 redirects to `https://LABalloons.com/`, which appears to be a Los Angeles-based balloon supply company.
+For example, let's say you want the status code for `http://balloon.com`, which 301 redirects to `https://LABalloons.com`, an LA-based balloon supply company. 
 
-However, if we simply run something like this:
+<aside>
 
-`balloon_com = HTTP.head("http://balloon.com/")`
+In this example, we'll be using the non-secure (`http`) version of balloon.com, as the secure (`https`) version does not resolve.
 
-... and then ask for the status code:
+</aside>
 
-`balloon_com.status`
+If we simply run:
 
-... we end up with this:
+`balloon_com = HTTP.head("http://balloon.com")`
 
-`200`
+... we get an error, which reads, in part:
 
-... which may not be what we want. So what's going on here? The reason we see a status code of `200` is because Julia is showing us the _eventual_ status code, i.e. the status code of the final page, `https://LABalloons.com/`.
+```
+ERROR: HTTP.ExceptionRequest.StatusError(405, "HEAD", "/", HTTP.Messages.Response:
+"""
+HTTP/1.1 405 Method Not Allowed
+```
 
-However, if we want to see that a 301 redirect occurred, we need to add the argument `redirect=false`:
+We get the same 405 status error even if we run the command with an additional argument preventing redirects:
 
-`balloon_com = HTTP.head("http://balloon.com/", redirect=false)`
+`balloon_com = HTTP.head("http://balloon.com", redirect=false)`
 
-Now we can ask to see the status:
+Instead, we need to use a full `HTTP.get()` request instead of `HTTP.head()`.
 
-`balloon_com.status`
+We'll also need to disallow redirects with that `redirect=false` argument:
 
-... and we see that a 301 redirect has occurred:
+`balloon_com = HTTP.get("http://balloon.com", redirect=false)`
 
-`301`
+We get, in part:
+
+```
+HTTP.Messages.Response:
+"""
+HTTP/1.1 301 Moved Permanently
+Date: Fri, 12 Nov 2021 12:20:46 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 57
+Connection: keep-alive
+Location: https://laballoons.com
+```
+
+We can now see that our original request for `http://balloon.com` was 301 redirected to `https://laballoons.com` (the new URL is in the last line of the truncated output above).
+
+<aside>
+
+If we had left out the `redirect=false` argument, we would have been silently redirected to `LAballoons.com`.
+
+Let's play this out. Here's the command without the `redirect=false` argument:
+
+`balloon_com = HTTP.get("http://balloon.com")`
+
+And here's the first part of the terminal output:
+
+```
+HTTP.Messages.Response:
+"""
+HTTP/1.1 200 OK
+```
+
+We wouldn't know about the 301 redirect that happened.
+
+That's why, when running a multi-url web scrape, I always include the `redirect=false` argument. I can then have my script get the destination urls (e.g. `LAballoons.com`) in the event of a 301 redirect.
+
+`HTTP.jl` has changed since I last did a big web scrape, but it appears I'll have to use the less-efficient `HTTP.get` rather than `HTTP.head` in order to cater for 301 and 302 redirects.
+
+</aside>
 
 ### Getting the status code of a 302 redirect
 
@@ -474,25 +525,20 @@ Did you know that Jeff Bezos owns `relentless.com` and 302 redirects it to Amazo
 
 So if we have Julia crawl it:
 
-`relentless_com = HTTP.head("http://relentless.com/")`
+`relentless_com = HTTP.get("http://relentless.com/", redirect=false)`
 
-... and then ask for the status code:
+We get, in part:
 
-`relentless_com.status`
+```
+HTTP.Messages.Response:
+"""
+HTTP/1.1 302 Moved Temporarily
+Date: Fri, 12 Nov 2021 12:32:33 GMT
+Server: Server
+Location: http://www.amazon.com
+```
 
-... we get:
-
-`200`
-
-... because that's the status code of the _eventual_ page you end up on, `https://www.amazon.com/`.
-
-However, if we add our `redirect=false` argument:
-
-`relentless_com = HTTP.head("http://relentless.com/", redirect=false)`
-
-... we get:
-
-`302`
+We can see that a 302 redirect (a temporary redirect) has occurred, and we have ended up on `http://www.amazon.com`. As an aside, of course Amazon is going to then redirect that non-secure Amazon.com url to the secure `https://www.amazon.com`. We can have our script follow these rabbit trails to make sure we are getting the final url---in this case, the secure `https://www.amazon.com`.
 
 ## Crawling just the headers
 
@@ -556,7 +602,7 @@ Or if you want just the _value_, you could do this:
 
 `"Thu, 17 Oct 2019 07:18:26 GMT"`
 
-NB: The `[2]` at the end of the last command above signifies that we want only the _second_ item in the key-value pair, namely, the value, which in this case is the actual date and time the page was last modified. If we'd used `[1]` instead of `[2]`, we'd get just the key, which in this case is simply the words `"Last-Modified"`.
+NB: The `[2]` at the end of the last command above signifies that we want only the _second_ item in the key-value pair, namely, the value, which in this case is the actual date and time the page was last modified. (Remember that Julia uses 1-based indexing, not zero-based like many other programming languages. In plain English, Julia starts counting at one, not zero---just the way I like it.) If we'd used `[1]` instead of `[2]`, we'd get just the key, which in this case is simply the words `"Last-Modified"`.
 
 ### Extracting the relevant headers from the Julia array by key name
 
