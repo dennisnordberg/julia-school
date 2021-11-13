@@ -41,7 +41,7 @@ OK, once you have Julia installed, fire up your terminal of choice, and enter th
 
 You should see the green Julia command prompt:
 
-`julia`
+`julia>`
 
 Now it's time to add the packages.
 
@@ -63,7 +63,7 @@ Hit Enter and let Julia do its thing.
 
 Once the packages have been installed, you can exit out of Julia's package manager by pressing Delete / Backspace. You'll then see the green prompt again:
 
-`julia`
+`julia>`
 
 ### "Using" the packages
 
