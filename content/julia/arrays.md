@@ -1,99 +1,142 @@
 ---
 title: How to use Julia arrays
-date: 2021-06-21 16:56:08+11:00
+date: 2021-11-22 16:56:08+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, and replace items in arrays in Julia.
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.6.1
+version: 1.6.4
 ---
 
 ## What is an array in the Julia language?
 
 Like in many programming languages, in Julia, an array is an ordered collection, or list, of items. You create arrays in Julia with square brackets, with each item separated with a comma:
 
-`planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
+`planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
-## How to create a Julia array with the numbers in a given range
+## How to get the first "n" items in an array in Julia?
 
-If you want a Julia array with all the numbers from 1 to 5:
+To get the first item in a Julia array, we simply do this:
 
-`collect(1:5)`
+`first(planets)`
+
+We get:
+
+`"Mercury"`
+
+To get the first "n" items in a Julia array, we add "n" as an optional second argument to `first()`. If we want the first three planets, for example, we'd input:
+
+`first(planets, 3)`
 
 We get:
 
 ```
-5-element Array{Int64,1}:
-  1
-  2
-  3
-  4
-  5
- ```
+3-element Vector{String}:
+ "Mercury"
+ "Venus"
+ "Earth"
+```
 
-If we want to count by anything other than 1, we can put the increment size between our start and end numbers.
+<aside>
 
-For example, if we want an array with the numbers from 1 to 5, counting by 2, we do this:
+The ability to add an integer as a second argument to the `first()` function---to specify how many leading items we want from the array---was added in Julia 1.6.4.
 
-`collect(1:2:5)`
+</aside>
+
+## How to get the last "n" items in an array in Julia?
+
+To get the last item in a Julia array, we simply do this:
+
+`last(planets)`
+
+We get:
+
+`"Pluto"`
+
+To get the last "n" items in a Julia array, we add "n" as an optional second argument to `last()`. For instance, if we want the last four planets in our array, we input:
+
+`last(planets, 4)`
 
 We get:
 
 ```
-3-element Vector{Int64}:
- 1
- 3
- 5
- ```
+4-element Vector{String}:
+ "Saturn"
+ "Uranus"
+ "Neptune"
+ "Pluto"
+```
+
+<aside>
+
+The ability to add an integer as a second argument to the `last()` function---to specify how many trailing items we want from the array---was added in Julia 1.6.4.
+
+</aside>
+
+## How to remove the first item from a Julia array
+
+Let's say the Sun has grown in size and swallowed Mercury. Now we need to delete Mercury (the first element in our array) from our `planets` array. We can do this using a function called `popfirst!()`:
+
+`popfirst!(planets)`
+
+In the terminal, we see the planet we just deleted:
+
+`"Mercury"`
+
+And if we input `planets`, we get:
+
+```
+8-element Vector{String}:
+ "Venus"
+ "Earth"
+ "Mars"
+ "Jupiter"
+ "Saturn"
+ "Uranus"
+ "Neptune"
+ "Pluto"
+```
+
+Note that our `planets` array has been made permanently smaller---the `popfirst!()` function modifies its arguments. 
+
+<aside>
+
+In Julia, you can tell that a function will destructively modify its arguments when it has an exclamation mark `!` after the function name and before the opening bracket, like this:
+
+`popfirst!(planets)`
+
+</aside>
 
 ## How to remove the last item from a Julia array
 
-Since Pluto is now officially a "dwarf planet" rather than a regular planet, perhaps it shouldn't be in the `planets` array above.
+Since Pluto is now officially a "dwarf planet" rather than a regular planet, perhaps it shouldn't be in our `planets` array either.
 
-To remove the last item from an array, we can use `pop!()`:
+To remove the last item from an array, we can use `pop!()`, like this:
 
 `pop!(planets)`
 
-Now when we have Julia show us the updated array with:
+Julia will show us the planet we just deleted:
+
+`"Pluto"`
+
+Now when we have Julia show us the updated array:
 
 `planets`
 
 ... we get:
 
 ```
-8-element Array{String,1}:
- "Mercury"
+7-element Vector{String}:
  "Venus"
- "Mars"
  "Earth"
+ "Mars"
  "Jupiter"
  "Saturn"
  "Uranus"
  "Neptune"
- ```
+```
 
- Bye Pluto.
-
-## How to remove the first item from a Julia array
-
- Let's say the Sun has grown in size and swallowed Mercury. Now we need to delete Mercury (the first element in our array) from our `planets` array. We can do this using a function called `popfirst()`:
-
-` popfirst!(planets)`
-
-We get the following result:
-
- ```
- 7-element Array{String,1}:
- "Venus"
- "Mars"
- "Earth"
- "Jupiter"
- "Saturn"
- "Uranus"
- "Neptune"
- ```
-
-Now Mercury has been removed from our array too. Pluto is missing too, because we deleted it earlier.
+Bye Pluto. We can see that Mercury isn't there either---we permanently deleted it in the section above.
 
 ## How to remove an item from a Julia array by index number
 
@@ -101,20 +144,20 @@ Let's create a new array:
 
 `astronauts = ["Buzz Aldrin", "Neil Armstrong", "Michael Collins", "Yuri Gagarin"]`
 
- What if we now want to delete, say, the third astronaut in our array?
- 
- We can do this with the `deleteat!` function. (It looks like the function name is "delete eat" but it's actually "delete at" 😂).
+What if we now want to delete, say, the third astronaut in our array?
 
- `deleteat!(astronauts, 3)`
+We can do this with the `deleteat!` function. (It looks like the function name is "delete eat" but it's actually "delete at" 😂).
 
- We get:
+`deleteat!(astronauts, 3)`
 
- ```
- 3-element Vector{String}:
+We get:
+
+```
+3-element Vector{String}:
  "Buzz Aldrin"
  "Neil Armstrong"
  "Yuri Gagarin"
- ```
+```
 
 ## How to delete elements from an array by name in Julia
 
@@ -132,13 +175,13 @@ We get:
 2-element Vector{String}:
  "Apollo"
  "Falcon Heavy"
- ```
+```
 
 ## How to add an item to an array in Julia
 
 Let's start with our original planets array (including Pluto) again:
 
-`planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
+`planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
 And let's pretend NASA (with a little help from SpaceX and Blue Origin) have just discovered a new planet, Mythos. To add it to our `planets` array, we use `push!()`:
 
@@ -150,15 +193,47 @@ We get:
 10-element Vector{String}:
  "Mercury"
  "Venus"
- "Mars"
  "Earth"
+ "Mars"
  "Jupiter"
  "Saturn"
  "Uranus"
  "Neptune"
  "Pluto"
  "Mythos"
- ```
+```
+
+## How to create a Julia array with the numbers in a given range
+
+If you want a Julia array with all the numbers from 1 to 5:
+
+`collect(1:5)`
+
+We get:
+
+```
+5-element Array{Int64,1}:
+  1
+  2
+  3
+  4
+  5
+```
+
+If we want to count by anything other than 1, we can put the increment size between our start and end numbers.
+
+For example, if we want an array with the numbers from 1 to 5, counting by 2, we do this:
+
+`collect(1:2:5)`
+
+We get:
+
+```
+3-element Vector{Int64}:
+ 1
+ 3
+ 5
+```
 
 ## How to find and replace strings in Julia arrays
 
@@ -166,7 +241,7 @@ OK, time for a new array:
 
 `array_1 = ["Houston", "Astrodome", "apollo"]`
 
-Let's say you want to fix that lowercase `apollo`, so that it becomes `Apollo`.
+Let's say you want to modify the lowercase `apollo`, so that it becomes the title case `Apollo`.
 
 Here's how to do that in Julia:
 
@@ -180,7 +255,7 @@ array_1
  "Houston"
  "Astrodome"
  "Apollo"
- ```
+```
 
 Let's walk through the example above bit by bit:
 
@@ -241,7 +316,7 @@ We get our desired result:
  "Lunar Rover 1"
  "Lunar Rover 2"
  "50% Sun Filter"
- ```
+```
 
 The `replace.()` code is virtually the same as in the previous, non-regex example; the only difference here is that we've added regex.
 
@@ -281,83 +356,83 @@ Let's walk through the code bit by bit:
 
 ## How to get the union of two arrays in Julia
 
- Let's say we have two arrays:
+Let's say we have two arrays:
 
 ```
 planets_a = ["Mars", "Earth", "Neptune"]
 planets_b = ["Pluto", "Earth", "Jupiter"]
 ```
 
- Now let's say we want to see all the elements in both arrays, deduped (note that `"Earth"` appears in both arrays).
+Now let's say we want to see all the elements in both arrays, deduped (note that `"Earth"` appears in both arrays).
 
- We can do that like this:
+We can do that like this:
 
- `array_union = union(planets_a, planets_b)`
+`array_union = union(planets_a, planets_b)`
 
- We get:
+We get:
 
- ```
+```
  5-element Array{String,1}:
  "Mars"
  "Earth"
  "Neptune"
  "Pluto"
  "Jupiter"
- ```
+```
 
- Notice that the result is deduped---we only get `"Earth"` once, even though it appeared in both arrays.
+Notice that the result is deduped---we only get `"Earth"` once, even though it appeared in both arrays.
 
 ## How to get the intersection of two arrays in Julia
 
- We can also get the _intersection_ of two arrays in Julia.
+We can also get the _intersection_ of two arrays in Julia.
 
- This means we want to see _only_ the element(s) that appear in both arrays.
+This means we want to see _only_ the element(s) that appear in both arrays.
 
- We do that like this:
+We do that like this:
 
- `array_intersect = intersect(planets_a, planets_b)`
+`array_intersect = intersect(planets_a, planets_b)`
 
- The result:
-
- ```
- 1-element Array{String,1}:
- "Earth"
- ```
-
- `"Earth"` was the only element that appeared in both arrays, so it is the only element that appears in the intersection.
-
- ## How to get the opposite of the intersection on two arrays in Julia (symmetric difference)
-
- If you want to get the opposite of the intersection of two arrays in Julia---items that appear in one array or the other but not both, then you need to use `symdiff()`.
- 
- <aside>
- 
- In mathematics, the set of non-overlapping items between two sets is called the "symmetric difference" (or the "disjunctive union"), hence Julia's function name `symdiff()`.
-
- </aside>
-
- Here's an example. Let's say we have the following two arrays. You'll notice the only common item is `Apollo`:
+The result:
 
 ```
- rockets = ["Apollo", "Saturn", "Falcon Heavy"]
- greek_gods = ["Apollo", "Zeus", "Hera"]
- ```
+ 1-element Array{String,1}:
+ "Earth"
+```
 
- We run the symdiff function to get all the non-common items:
+`"Earth"` was the only element that appeared in both arrays, so it is the only element that appears in the intersection.
 
- `symdiff(rockets, greek_gods)`
+## How to get the opposite of the intersection on two arrays in Julia (symmetric difference)
 
- The result:
+If you want to get the opposite of the intersection of two arrays in Julia---items that appear in one array or the other but not both, then you need to use `symdiff()`.
 
- ```
- 4-element Vector{String}:
- "Saturn"
- "Falcon Heavy"
- "Zeus"
- "Hera"
- ```
+<aside>
 
- `Apollo` is the only item in both arrays, and thus it is the only item not to appear in our result.
+In mathematics, the set of non-overlapping items between two sets is called the "symmetric difference" (or the "disjunctive union"), hence Julia's function name `symdiff()`.
+
+</aside>
+
+Here's an example. Let's say we have the following two arrays. You'll notice the only common item is `Apollo`:
+
+```
+rockets = ["Apollo", "Saturn", "Falcon Heavy"]
+greek_gods = ["Apollo", "Zeus", "Hera"]
+```
+
+We run the symdiff function to get all the non-common items:
+
+`symdiff(rockets, greek_gods)`
+
+The result:
+
+```
+4-element Vector{String}:
+  "Saturn"
+  "Falcon Heavy"
+  "Zeus"
+  "Hera"
+```
+
+`Apollo` is the only item in both arrays, and thus it is the only item not to appear in our result.
 
 ## How to get the items that exist in one Julia array but not the other
 
@@ -380,25 +455,25 @@ We do that like this:
 2-element Array{String,1}:
  "Mars"
  "Neptune"
- ```
+```
 
- The order matters here. If we reverse the order of the arrays inside the `setdiff` function, like this:
+The order matters here. If we reverse the order of the arrays inside the `setdiff` function, like this:
 
- `setdiff(planets_b, planets_a)`
+`setdiff(planets_b, planets_a)`
 
- ... we get:
+... we get:
 
- ```
- 2-element Array{String,1}:
+```
+2-element Array{String,1}:
  "Pluto"
  "Jupiter"
- ```
+```
 
 ## How to check if a value exists in an array
 
 Let's begin with the O.G. nine planets again:
 
-`planets = ["Mercury", "Venus", "Mars", "Earth", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
+`planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
 If you wanted to check if Pluto was included in our `planets` array (hey, you never know these days), you can do that like this:
 
@@ -468,11 +543,11 @@ Now when you call up `space_companies`, you get this:
  "Blue Origin"
  "Boeing"
  "Sierra Nevada Corporation"
- ```
+```
 
 ## How to write a Julia array to a CSV file
 
- Let's say you want to write the contents of a Julia array to a CSV file.
+Let's say you want to write the contents of a Julia array to a CSV file.
 
 We'll be using the `array_union` file from earlier in this tutorial. If you've just joined and want to follow along, you can create it like this:
 
@@ -480,21 +555,21 @@ We'll be using the `array_union` file from earlier in this tutorial. If you've j
 
 Okay, now let's specify where the file should be saved, its name and filetype. To keep things simple, let's store it in a new variable we'll create called `outfile`:
 
- `outfile = "/Users/ron/Desktop/outfile.csv"`
+`outfile = "/Users/ron/Desktop/outfile.csv"`
 
- So the file will be called `outfile.csv` and it will be created on my Mac desktop.
+So the file will be called `outfile.csv` and it will be created on my Mac desktop.
 
- Obviously, you'll need to change the `ron` part in the path above. And that's assuming you're on Mac; if you're on Windows, you'll need to alter the path entirely.
+Obviously, you'll need to change the `ron` part in the path above. And that's assuming you're on Mac; if you're on Windows, you'll need to alter the path entirely.
 
- Next, we're going to use a module that's built-in to Julia, called `DelimitedFiles`. Because it comes with Julia out of the box, you don't need to install it. You do, however, need to tell Julia that you want to use it:
+Next, we're going to use a module that's built-in to Julia, called `DelimitedFiles`. Because it comes with Julia out of the box, you don't need to install it. You do, however, need to tell Julia that you want to use it:
 
- `using DelimitedFiles`
+`using DelimitedFiles`
 
- Now we can use `DelimitedFiles` to write our CSV:
+Now we can use `DelimitedFiles` to write our CSV:
 
- `writedlm(outfile, array_union)`
+`writedlm(outfile, array_union)`
 
- Walking through that code above, we're using a built-in function called `writedlm` to write our `array_union` of planets to our `outfile` (which we defined earlier).
+Walking through that code above, we're using a built-in function called `writedlm` to write our `array_union` of planets to our `outfile` (which we defined earlier).
 
 You'll end up with an `outfile.csv` on your desktop, the contents of which reads:
 
