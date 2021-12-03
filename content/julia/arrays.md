@@ -1,11 +1,11 @@
 ---
 title: How to use Julia arrays
-date: 2021-11-22 16:56:08+11:00
+date: 2021-12-03 14:36:08+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, and replace items in arrays in Julia.
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.6.4
+version: 1.7.0
 ---
 
 ## What is an array in the Julia language?
@@ -144,20 +144,52 @@ Let's create a new array:
 
 `astronauts = ["Buzz Aldrin", "Neil Armstrong", "Michael Collins", "Yuri Gagarin"]`
 
-What if we now want to delete, say, the third astronaut in our array?
+What if we now want to delete, say, the second astronaut in our array?
 
 We can do this with the `deleteat!` function. (It looks like the function name is "delete eat" but it's actually "delete at" 😂).
 
-`deleteat!(astronauts, 3)`
+`deleteat!(astronauts, 2)`
 
 We get:
 
 ```
 3-element Vector{String}:
  "Buzz Aldrin"
- "Neil Armstrong"
+ "Michael Collins"
  "Yuri Gagarin"
 ```
+
+You can also delete a range of elements from an array using `deleteat!()` in Julia.
+
+Let's start with our original planets again:
+
+`planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
+
+If we want to delete planets three to seven inclusive, we can do this:
+
+`deleteat!(planets, collect(3:7))`
+
+We see the remaining planets:
+
+```
+4-element Vector{String}:
+ "Mercury"
+ "Venus"
+ "Neptune"
+ "Pluto"
+```
+
+<aside>
+
+Remember that `collect()` is how we build an array of numbers in a given range in Julia. For example:
+
+`collect(2:4)`
+
+gives us:
+
+`[2,3,4]`
+
+</aside>
 
 ## How to delete elements from an array by name in Julia
 
@@ -176,6 +208,80 @@ We get:
  "Apollo"
  "Falcon Heavy"
 ```
+
+## How to keep only certain elements in a Julia array
+
+Now that Julia 1.7 has been released, we can opt to keep only certain elements in a Julia array with `keepat!()`.
+
+For example, say we're using our original array of rockets:
+
+`rockets = ["Apollo", "Saturn", "Falcon Heavy"]`
+
+We can keep just the second rocket:
+
+`keepat!(rockets, 2)`
+
+We get:
+
+```
+1-element Vector{String}:
+ "Saturn"
+```
+
+If we want to keep more than one element, we can do so by passing in an array instead of an integer. If we start with our original astronauts:
+
+`astronauts = ["Buzz Aldrin", "Neil Armstrong", "Michael Collins", "Yuri Gagarin"]`
+
+We can keep the second and fourth astronaut like this:
+
+`keepat!(astronauts, [2,4])`
+
+We get:
+
+```
+2-element Vector{String}:
+ "Neil Armstrong"
+ "Yuri Gagarin"
+```
+
+<aside>
+
+Above, we surrounded `2,4` with square brackets, as when we pass more than one number to `keepat!()`, it needs to be in an array (which we denote with square brackets).
+
+</aside>
+
+You can also pass a range of element positions to `keepat!()`.
+
+Let's start with our original planets array:
+
+`planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
+
+If we want to keep only planets three to five (inclusive), we do this:
+
+`keepat!(planets, collect(3:5))`
+
+We get:
+
+```
+3-element Vector{String}:
+ "Earth"
+ "Mars"
+ "Jupiter"
+```
+
+<aside>
+
+Remember that `collect()` is how we build an array of numbers in a given range in Julia. For example:
+
+`collect(2:4)`
+
+gives us:
+
+`[2,3,4]`
+
+Earlier on this page, we also covered how to set the increment of the step, if you want to count by anything other than one.
+
+</aside>
 
 ## How to add an item to an array in Julia
 
