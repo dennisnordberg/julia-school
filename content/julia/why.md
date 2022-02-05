@@ -1,6 +1,6 @@
 ---
 title: Why Julia? It's fast and easy
-date: 2021-03-31 11:00:00+11:00
+date: 2022-02-05 12:00:00+11:00
 seoTitle: Why Julia?
 description: If you're going to learn a coding language for data science, Julia is the one. Here's why.
 authors: ["Ron Erdos"]
@@ -18,6 +18,12 @@ Here's a [cracking a quote from Viral Shah, a co-creator of Julia, in Quartz mag
 Another great quote from the same Quartz article:
 
 > Julia is faster than Python and R because it is specifically designed to quickly implement the basic mathematics that underlies most data science, like matrix expressions and linear algebra.
+
+[Menlo Ventures partner Tim Tully wrote a great post on why they invested in Julia Computing](https://medium.com/@timtullydevnull/why-menlo-ventures-invested-in-julia-computing-e0e3633d85a5). Among many great observations, he notes:
+
+>Julia is 10 - 100x faster than Python in almost all cases.
+
+_NB: Julia, the language and ecosytem, is free and open source (FOSS). Julia Computing, by contrast, is a for-profit company that provides products and services related to Julia._
 
 ## You don't have to avoid loops, or write C functions in R or Python any more
 
@@ -100,30 +106,38 @@ Julia: One is one, two is two, and so on. Simple, right? A kindergarten kid coul
 
 Python: Zero is one, two is three, but four is actually four if it's at the end of a slice. Oh. My. God. Sounds more complicated than the rules of rugby union.
 
-## Who uses Julia?
+## Which companies use Julia?
 
 From the [official Julia website](https://julialang.org/):
 
-> Julia has been downloaded over 25 million times and the Julia community has registered over 5,000 Julia packages for community use.
+> Julia has been downloaded over 34.8 million times and the Julia community has registered over 6,800 Julia packages for community use.
 
-Now, some of those 25 million downloads will be people kicking the tyres and then never using it again. Fair enough.
+Now, some of those 34 million downloads will be people kicking the tyres and then never using it again. Fair enough.
 
 However, Julia is used at major league companies and organisations, including:
 
-- Apple
-- Amazon
-- Facebook
-- Google (Alphabet)
-- Microsoft
-- IBM
-- Uber
-- KPMG
-- NASA
-- The Brazilian space program
-- The New York Federal Reserve
-- Disney
-- Ford
-- Blackrock, the world's largest asset manager
-- Tencent
+### Automotive and Aerospace
+
+Ford, NASA, Uber, and the space program of Brazil
+
+### Banking and Finance
+
+Blackrock (world's largest investment management company with ~USD$10T AUM), KPMG, The New York Federal Reserve
+
+### Education (on curriculum)
+
+Berkeley, Carnegie Mellon University, MIT, Stanford.
+
+### Entertainment and Media
+
+Disney
+
+### Pharmaceutical
+
+AstraZeneca, Pfizer
+
+### Technology
+
+Amazon, Apple, Facebook (Meta), Google (Alphabet), IBM, Microsoft, Tencent
 
 Pretty impressive list, right?
