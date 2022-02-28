@@ -1,11 +1,11 @@
 ---
 title: How to use Julia arrays
-date: 2021-12-03 14:36:08+11:00
+date: 2022-02-28 21:00:08+11:00
 seoTitle: "Julia arrays: How to add, delete, and replace items"
 description: This tutorial will show you how to add, delete, and replace items in arrays in Julia.
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.7.0
+version: 1.7.2
 ---
 
 ## What is an array in the Julia language?
@@ -97,13 +97,15 @@ And if we input `planets`, we get:
  "Pluto"
 ```
 
-Note that our `planets` array has been made permanently smaller---the `popfirst!()` function modifies its arguments. 
+Note that our `planets` array has been made smaller in a persistent way---the `popfirst!()` function modifies its arguments.
 
 <aside>
 
-In Julia, you can tell that a function will destructively modify its arguments when it has an exclamation mark `!` after the function name and before the opening bracket, like this:
+In Julia---and in some other programming languages---if a function has an exclamation mark after its name, this means it will alter some data in a way that persists.
 
-`popfirst!(planets)`
+For example, the `popfirst!()` function removes---in a non-temporary way---the first item from an array.
+
+Functions with an exclamation mark are sometimes called "bang functions".
 
 </aside>
 
@@ -161,13 +163,13 @@ We get:
 
 You can also delete a range of elements from an array using `deleteat!()` in Julia.
 
-Let's start with our original planets again:
+Let's start with our original planets again. By inputting the code below, we'll be overwriting our seven-planet array with our original nine-planet array.
 
 `planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]`
 
 If we want to delete planets three to seven inclusive, we can do this:
 
-`deleteat!(planets, collect(3:7))`
+`deleteat!(planets, 3:7)`
 
 We see the remaining planets:
 
@@ -178,18 +180,6 @@ We see the remaining planets:
  "Neptune"
  "Pluto"
 ```
-
-<aside>
-
-Remember that `collect()` is how we build an array of numbers in a given range in Julia. For example:
-
-`collect(2:4)`
-
-gives us:
-
-`[2,3,4]`
-
-</aside>
 
 ## How to delete elements from an array by name in Julia
 
@@ -258,7 +248,7 @@ Let's start with our original planets array:
 
 If we want to keep only planets three to five (inclusive), we do this:
 
-`keepat!(planets, collect(3:5))`
+`keepat!(planets, 3:5)`
 
 We get:
 
@@ -268,20 +258,6 @@ We get:
  "Mars"
  "Jupiter"
 ```
-
-<aside>
-
-Remember that `collect()` is how we build an array of numbers in a given range in Julia. For example:
-
-`collect(2:4)`
-
-gives us:
-
-`[2,3,4]`
-
-Earlier on this page, we also covered how to set the increment of the step, if you want to count by anything other than one.
-
-</aside>
 
 ## How to add an item to an array in Julia
 
@@ -341,124 +317,131 @@ We get:
  5
 ```
 
-## How to find and replace strings in Julia arrays
+## How to find and replace with Julia arrays
 
-OK, time for a new array:
+Time for a new array:
 
-`array_1 = ["Houston", "Astrodome", "apollo"]`
+`array_1 = ["Houston", "Washington", "orlando"]`
 
-Let's say you want to modify the lowercase `apollo`, so that it becomes the title case `Apollo`.
+Notice that the first two items are in title case, while `"orlando"` is in lowercase. Let's make it consistent using a find and replace.
 
-Here's how to do that in Julia:
+We can do this:
 
-`array_1 = replace.(array_1, "apollo"=>"Apollo")`
+`array_1 = replace(array_1, "orlando" => "Orlando")`
 
-Now `array_1` looks like this:
+Now when we input `array_1` into our Julia terminal, we get:
 
 ```
-array_1
-3-element Array{String,1}:
+3-element Vector{String}:
  "Houston"
- "Astrodome"
- "Apollo"
-```
+ "Washington"
+ "Orlando"
+ ```
 
-Let's walk through the example above bit by bit:
+ Voila!
+ 
+ However, we can also use the bang function `replace!()`, which will make our code more concise. Let's use another array to demonstrate:
 
-> `array_1 =`
->
-> Here we are re-assigning the array (named `array_1`) to the output of our code. This means it is a "destructive" outcome.
+ `array_2 = ["Gagarin", "Armstrong", "aldrin"]`
 
-> `replace.`
->
-> This is the "find and replace" function in Julia. We use the `.` to signify that we want to apply our find and replace to each item in the array. In Julia, this is called "broadcasting" 🎙.
+ This time, let's use the bang function to make the last item in title case:
 
-> `(`
->
-> Here, we open the function brackets, a necessary task.
+ `replace!(array_2, "aldrin" => "Aldrin")`
 
-> `array_1`
->
-> Now we tell Julia which array to perform our "find and replace". In this case, it's our array named `array_1`.
+ When we input `array_2` into our Julia terminal, we get:
 
-> `"apollo"`
->
-> Here's the "needle" we're looking for in the proverbial haystack. We're looking for all instances of `apollo`.
+ ```
+ 3-element Vector{String}:
+ "Gagarin"
+ "Armstrong"
+ "Aldrin"
+ ```
 
-> `=>`
->
-> The "fat arrow" in Julia means, in this context, "transform". So we are transforming `"apollo"` into whatever comes after the fat arrow (which in this case, is `"Apollo"`)
+Just what we wanted.
 
-> ``"Apollo"``
->
-> Here's what we want our "find and replace" matches to become.
+## How to use regex with "find and replace" on arrays in Julia
 
-> `)`
->
-> Here we close the function brackets, a necessary task.
+Using regex to find and replace within arrays in Julia requires a slightly different approach. Let's work with an example.
 
-## How to find and replace strings using regex in Julia arrays
+Let's input a third array into our terminal:
 
-Okay, new example. Let's say we have the following array:
+`array_3 = ["fish", "fishes", "goldfish", "cat"]`
 
-`array_2 = ["Lunar Rover 1", "%Lunar Rover 2", "50% Sun Filter"]`
+Let's normalise this data so that each of the different types of fish end up as simply `"fish"`.
 
-We can see there's an extraneous `%` at the start of the second item in this array, `%Lunar Rover 2`.
+The way to do this in Julia is as follows:
 
-However, the `%` in `"50% Sun Filter"` is __meant__ to be there.
+`array_3 = replace.(array_3, r"(gold)?fish(es)?" => s"fish")`
 
-So how can we delete the `%` from `%Lunar Rover 2` without also deleting the `%` from `50% Sun Filter`?
-
-The answer is: with regex.
-
-Here's how to use regex to do a find and replace in a Julia array:
-
-`array_2 = replace.(array_2, r"^%"=>"")`
-
-We get our desired result:
+When we input `array_3` into our Julia terminal, we get our desired result:
 
 ```
-3-element Array{String,1}:
- "Lunar Rover 1"
- "Lunar Rover 2"
- "50% Sun Filter"
+4-element Vector{String}:
+ "fish"
+ "fish"
+ "fish"
+ "cat"
 ```
 
-The `replace.()` code is virtually the same as in the previous, non-regex example; the only difference here is that we've added regex.
+Let's walk through the code above --- including the regex --- and then we'll get to some approaches that don't work.
 
-Let's walk through the code bit by bit:
+> `array_3 =` Here we are reassigning `array_3` to the result of our forthcoming find-and-replace. This will make the change persist.
 
-> `array_2 =`
+> `replace.(` Here we call the built-in Julia function `replace`. The dot `.` after `replace` indicates we're using the "broadcast" version of the function. This means that our operation will apply to each item in the array.
 >
-> Here we are re-assigning the array (named `array_2`) to the output of our code. This means it is a "destructive" outcome.
+> Next, we open the parentheses so we can add our arguments.
 
->`replace.`
->
-> Here's our Julia "find and replace" function again. We're again using our trusty `.` to signify that we want to apply our find and replace to each item in the array.
+> `array_3` We tell Julia where to perform the find-and-replace --- the proverbial haystack.
 
-> `(`
+> `r"(gold)?fish(es)?"` We now tell Julia what we're looking for --- the proverbial needle.
 >
-> Here, we open the function brackets, a necessary task.
+> In this case, it's a regex (denoted by the letter `r` immediately before an opening double quote mark).
+>
+> Inside the double quotes, we have the our string `fish`, surrounded by the optional prefix `gold` (as in `goldfish`) and the optional suffix `es` (as in `fishes`). If you're not familiar with regex, it can be a tricky subject, but the question mark `?` means the preceding text is optional. And because we've wrapped `gold` and `es` in parentheses, we've made each a separate optional "unit".
 
->`array_2`
->
-> Now we tell Julia which array to perform our "find and replace". In this case, it's an array named `array_2`.
+> `=>` The "fat arrow" or "stabby arrow" means replace the "needle" with whatever comes next. In this case, it's ...
 
-> `r"^%"`
->
-> Here's the "needle" we're looking for in the proverbial haystack. This is what we want Julia to match. The `r` before the first double quote tells Julia we're using regex. The double quotes contain the "needle"; the match itself. The caret `^`, when used this way in regex, means "the start of the string". And finally, we have the percentage sign itself. (Remember, we're trying to remove leading percentage signs from elements in our array). Putting that all together, we're looking for a percentage sign at the start of a string.
+> `s"fish"` --- Here, we're telling Julia our desired replacement. The `s` stands for "substitution".
 
-> `=>`
->
-> The "fat arrow" in Julia means, in this context, "transform". So we are transforming our regex match into whatever comes after the fat arrow (see below).
+> `)` Here we close the parentheses for the `replace.` function.
 
-> `""`
->
-> The empty double quotes are, in this context, how you replace something with nothing, which is what we're doing here; replacing a leading `%` with nothing.
+### Approaches that don't work for using regex to find and replace in Julia arrays
 
-> `)`
->
-> Here we close the function brackets.
+There are a couple of approaches that won't work here.
+
+First, let's reset our array:
+
+`array_3 = ["fish", "fishes", "silverfish", "cat"]`
+
+Now let's try the "reassign" approach that worked for non-regex find-and-replace on arrays earlier in this tutorial:
+
+`array_3 = replace(array_3, r"(gold)?fish(es)?" => s"fish")`
+
+This doesn't do anything; if we input `array_3` into our Julia terminal, we get the unwanted original values:
+
+```
+4-element Vector{AbstractString}:
+ "fish"
+ "fishes"
+ "goldfish"
+ "cat"
+```
+
+Okay, what about the "bang function" approach that also worked for non-regex find-and-replace on arrays earlier in this tutorial? Let's try that:
+
+`replace!(array_3, r"(gold)?fish(es)?" => s"fish")`
+
+That doesn't work either; when we input `array_3`, we still get the same unchanged result:
+
+```
+4-element Vector{AbstractString}:
+ "fish"
+ "fishes"
+ "goldfish"
+ "cat"
+```
+
+The takeout here is that when using regex to find and replace in Julia arrays, we need to use the "broadcast" version of the replace function, as described at the top of this section. Even though we can get away without using it for non-regex find-and-replace operations on Julia arrays, we need the broadcast-enabled `replace.()` when using regex.
 
 ## How to get the union of two arrays in Julia
 
