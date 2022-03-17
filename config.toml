@@ -3,7 +3,7 @@ languageCode = "en-au"
 title = "Julia School"
 theme = "moonbooth-seo-theme"
 enableRobotsTXT = true
-[taxonomies]
+disableKinds = ['taxonomy', 'term']
 [params]
 	blogFooterLinkText = "Julia Tutorials"
     blogSection = "julia"

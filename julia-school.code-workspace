@@ -9,11 +9,14 @@
 			"titleBar.activeBackground": "#8CF67B",
 			"titleBar.inactiveBackground": "#8CF67B99",
 			"titleBar.activeForeground": "#000",
+			"titleBar.border": "#8CF67B",
+			"tab.activeBackground": "#8CF67B",
+			"tab.activeForeground": "#000",
+			"tab.activeBorder": "#8CF67B",
 			"statusBar.background": "#8CF67B",
 			"statusBar.foreground": "#000",
-			"tab.activeBorder": "#8CF67B",
 			"statusBar.border": "#8CF67B",
-			"titleBar.border": "#8CF67B"
+			"workspaceInStatusBar.text": "#000"
 		}
 	}
 }
