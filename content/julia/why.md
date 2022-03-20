@@ -118,7 +118,7 @@ However, Julia is used at major league companies and organisations, including:
 
 ### Automotive and Aerospace
 
-Ford, NASA, Uber, and the space program of Brazil
+Ford, NASA, Uber, and _Agência Espacial Brasileira_ (Brazilian Space Agency)
 
 ### Banking and Finance
 
