@@ -77,7 +77,7 @@ Unlike when we `add`ed the packages, we need to use commas to separate the packa
 
 We're going to scrape the homepage of `example.com` in this tutorial.
 
-We'll store it in a new variable we'll create, called `r`.
+We'll store it in a new variable we'll create, and we'll call this variable `r` (for "request", as in "HTTP request").
 
 We'll just use the `HTTP` package for now---we'll use the others later.
 
@@ -191,7 +191,7 @@ If you skipped entering that command into your Julia REPL earlier, you should te
 
 ### Turning our blob of HTML into a parseable HTML tree with Gumbo
 
-Earlier, we stored our crawl of the homepage of `example.com` into a variable we called `r`.
+Earlier, we stored our crawl of the homepage of `example.com` into a variable we called `r` (which stands for "request", as in "HTTP request").
 
 Now we'll make a "Gumbo" version---which will be easily traversable---of that `r` variable, and we'll call it `r_parsed`.
 
@@ -231,9 +231,11 @@ This output is also truncated, but we're now ready to start digging down into ou
 
 ### Digging down into Gumbo's parsed HTML tree
 
-What if you want to see _just_ the `<head>` section of this source code, the source code of `example.com`?
+To dig down into Gumbo's parsed HTML tree, we'll need to append `.root` to `r_parsed` to start working with it. So we'll be using `r_parsed.root`.
 
-Well, we need to add `.root` to `r_parsed` to start working with it. So we'll be using `r_parsed.root`. And inside that, there are two main section, the `<head>` (available at `r_parsed.root[1]`), and the `<body>` (at `r_parsed.root[2]`).
+Now, let's say we want to see _just_ the `<head>` section of this source code, the source code of `example.com`.
+
+Well, there are two main sections in the source code of any web page: the `<head>` (available at `r_parsed.root[1]`), and the `<body>` (which can be found at `r_parsed.root[2]`). (Remember that Julia uses 1-based indexing.)
 
 Since we want the `<head>` section to start with, we'll use this command:
 
