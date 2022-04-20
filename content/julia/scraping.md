@@ -194,11 +194,11 @@ _Notice that a semicolon separates the first two parameters from the_ `cookies` 
 This differs from the code earlier in this tutorial in two ways:
 
 1. I used the more verbose `HTTP.request()` (with a `"GET"` argument) rather than `HTTP.get()`. This is because `HTTP.request()` allows you to set cookies, and, as far as I can tell, `HTTP.get()` doesn't.
-2. I set a cookie. In the code above, my cookie's name is `foo` and its value is set to `123`.
+2. I set a cookie. In the code above, my cookie's name is `foo` and its value is `123`.
 
 Note that if I'd needed to set multiple cookies, I could have done so like this:
 
-`r = HTTP.request("GET", url; cookies=Dict("foo"=>123, "bar"=>"abc"))`.
+`r = HTTP.request("GET", url; cookies=Dict("foo"=>123, "bar"=>"abc"))`
 
 Another point to note: I didn't bother setting a cookie expiry since my script sets the cookie each time the code scrapes a url.
 
