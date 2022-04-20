@@ -1,11 +1,11 @@
 ---
 title: Scraping web pages with Julia and the HTTP and Gumbo packages
-date: 2021-11-12 23:04:32+11:00
+date: 2022-04-20 19:35:32+11:00
 seoTitle: "Scraping web pages with Julia HTTP & Gumbo: Tutorial"
 description: Julia can be used for fast web scraping, not just data analysis.
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.6.3
+version: 1.7.2
 ---
 
 Do you want to crawl and scrape web pages with the Julia language? This tutorial will show you how.
@@ -173,7 +173,36 @@ Julia truncates the output, but we can see, in descending order:
 2) the **headers**, which in this case consists of eleven key-value pairs from `Age: 433583` through to `Content-Length: 1256`
 3) the first 1000 or so characters of the **source code** of the actual HTML document. In this case, we see `<!doctype html>` through to just after `<h1>Example Domain</h1>`. Note that the full web page will be stored in our variable `r`; it's just the output in the Julia REPL that's truncated.
 
-Later on in this tutorial, we'll explore techniques for laser-targeting _just_ the status code or _just_ the headers (see the table of contents at the top for links to these), but for now, let's continue exploring how we can target individual HTML elements in the source code.
+Later on in this tutorial, we'll explore techniques for laser-targeting _just_ the status code or _just_ the headers (see the table of contents at the top for links to these), but for now, let's continue exploring how we can target individual HTML elements in the source code. First though, the section below shows you how to set cookies when web scraping with Julia and the HTTP.jl package. If you don't need to set cookies, feel free to skip to the next heading.
+
+## How to set cookies when web scraping with Julia and the HTTP.jl package
+
+This week, I needed to scrape our company's staging server. I knew that I would need my scraper set a cookie to make our staged web application behave properly for the scrape.
+
+To set a cookie, I started with the following (vastly simplified) code:
+
+```
+using HTTP, Gumbo
+
+url = https://staging.example.com 
+
+r = HTTP.request("GET", url; cookies=Dict("foo"=>123))
+```
+
+_Notice that a semicolon separates the first two parameters from the_ `cookies` _dictionary---it'd be easy to misread this as a comma._
+
+This differs from the code earlier in this tutorial in two ways:
+
+1. I used the more verbose `HTTP.request()` (with a `"GET"` argument) rather than `HTTP.get()`. This is because `HTTP.request()` allows you to set cookies, and, as far as I can tell, `HTTP.get()` doesn't.
+2. I set a cookie. In the code above, my cookie's name is `foo` and its value is set to `123`.
+
+Note that if I'd needed to set multiple cookies, I could have done so like this:
+
+`r = HTTP.request("GET", url; cookies=Dict("foo"=>123, "bar"=>"abc"))`.
+
+Another point to note: I didn't bother setting a cookie expiry since my script sets the cookie each time the code scrapes a url.
+
+So that wraps up the "how to" on setting cookies with Julia web scraping. And now, back to the tutorial on scraping the public `example.com` website.
 
 ## Enter Gumbo.jl
 
