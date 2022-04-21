@@ -173,7 +173,7 @@ Julia truncates the output, but we can see, in descending order:
 2) the **headers**, which in this case consists of eleven key-value pairs from `Age: 433583` through to `Content-Length: 1256`
 3) the first 1000 or so characters of the **source code** of the actual HTML document. In this case, we see `<!doctype html>` through to just after `<h1>Example Domain</h1>`. Note that the full web page will be stored in our variable `r`; it's just the output in the Julia REPL that's truncated.
 
-Later on in this tutorial, we'll explore techniques for laser-targeting _just_ the status code or _just_ the headers (see the table of contents at the top for links to these), but for now, let's continue exploring how we can target individual HTML elements in the source code. First though, the section below shows you how to set cookies when web scraping with Julia and the HTTP.jl package. If you don't need to set cookies, feel free to skip to the next heading.
+Later on in this tutorial, we'll explore techniques for laser-targeting _just_ the status code or _just_ the headers (see the table of contents at the top for links to these), but for now, let's continue exploring how we can target individual HTML elements in the source code. First though, the section below shows you how to set cookies when web scraping with Julia and the HTTP.jl package. If you don't need to set cookies, feel free to skip to the next section.
 
 ## How to set cookies when web scraping with Julia and the HTTP.jl package
 
@@ -196,11 +196,29 @@ This differs from the code earlier in this tutorial in two ways:
 1. I used the more verbose `HTTP.request()` (with a `"GET"` argument) rather than `HTTP.get()`. This is because `HTTP.request()` allows you to set cookies, and, as far as I can tell, `HTTP.get()` doesn't.
 2. I set a cookie. In the code above, my cookie's name is `foo` and its value is `123`.
 
+Below are some additional pointers on setting cookies when scraping websites with Julia.
+
+### How to set the value of a cookie to `true` with HTTP.jl
+
+If you need to set the value of a cookie to `true`, set it to `"true"` (with the double quotes). For example:
+
+`r = HTTP.request("GET", url; cookies=Dict("foo"=>"true"))`
+
+(Don't worry, it will come through correctly as `true`.)
+
+Otherwise you'll get an error like so:
+
+`LoadError: TypeError: in keyword argument cookies, expected Union{Bool, Dict{<:AbstractString, <:AbstractString}}, got a value of type Dict{String, Bool}`
+
+### How to set multiple cookies with HTTP.jl
+
 Note that if I'd needed to set multiple cookies, I could have done so like this:
 
 `r = HTTP.request("GET", url; cookies=Dict("foo"=>123, "bar"=>"abc"))`
 
-Another point to note: I didn't bother setting a cookie expiry since my script sets the cookie each time the code scrapes a url.
+### You don't need to set a cookie expiry with HTTP.jl
+
+I didn't bother setting a cookie expiry since my script sets the cookie each time the code scrapes a url.
 
 So that wraps up the "how to" on setting cookies with Julia web scraping. And now, back to the tutorial on scraping the public `example.com` website.
 
