@@ -1,6 +1,6 @@
 ---
 title: Scraping web pages with Julia and the HTTP and Gumbo packages
-date: 2022-04-20 19:35:32+11:00
+date: 2022-05-14 14:35:32+11:00
 seoTitle: "Scraping web pages with Julia HTTP & Gumbo: Tutorial"
 description: Julia can be used for fast web scraping, not just data analysis.
 authors: ["Ron Erdos"]
@@ -173,7 +173,7 @@ Julia truncates the output, but we can see, in descending order:
 2) the **headers**, which in this case consists of eleven key-value pairs from `Age: 433583` through to `Content-Length: 1256`
 3) the first 1000 or so characters of the **source code** of the actual HTML document. In this case, we see `<!doctype html>` through to just after `<h1>Example Domain</h1>`. Note that the full web page will be stored in our variable `r`; it's just the output in the Julia REPL that's truncated.
 
-Later on in this tutorial, we'll explore techniques for laser-targeting _just_ the status code or _just_ the headers (see the table of contents at the top for links to these), but for now, let's continue exploring how we can target individual HTML elements in the source code. First though, the section below shows you how to set cookies when web scraping with Julia and the HTTP.jl package. If you don't need to set cookies, feel free to skip to the next section.
+Later on in this tutorial, we'll explore techniques for laser-targeting _just_ the status code or _just_ the headers (see the table of contents at the top for links to these), but for now, let's continue exploring how we can target individual HTML elements in the source code. First though, the next three sections show you how to set cookies and headers when web scraping with Julia and the HTTP.jl package. If you don't need to set cookies or headers, feel free to skip past these.
 
 ## How to set cookies when web scraping with Julia and the HTTP.jl package
 
@@ -220,7 +220,27 @@ Note that if I'd needed to set multiple cookies, I could have done so like this:
 
 I didn't bother setting a cookie expiry since my script sets the cookie each time the code scrapes a url.
 
-So that wraps up the "how to" on setting cookies with Julia web scraping. And now, back to the tutorial on scraping the public `example.com` website.
+So that wraps up the "how to" on setting cookies with Julia web scraping. Before we get back to the tutorial proper, a quick tip on setting headers.
+
+## How to set headers when web scraping with Julia and the HTTP.jl package
+
+Today I need to scrape a different staging server at work. This didn't require cookies to be set, but it did require a custom header. In this case, I needed to set an `x-country` header. 
+
+Here's the relevant line of code which does that in Julia using the HTTP.jl package:
+
+`r = HTTP.request("GET", url; headers=Dict("x-country" => "$country"))`
+
+_For the rest of the code, scroll up to the earlier part of the tutorial where we talk about scraping_ `example.com`.
+
+## How to set both cookies and headers when scraping with Julia and the HTTP.jl package
+
+If you need to set both cookies _and_ headers when scraping with Julia's HTTP.jl package, you can do so like this:
+
+`r = HTTP.request("GET", url; headers=Dict("x-country" => "$country"), cookies=Dict("ALLOW_ZONE_OVERRIDE"=>"true"))`
+
+_For the rest of the code, scroll up to the earlier part of the tutorial where we talk about scraping_ `example.com`.
+
+And now, let's continue our tutorial on scraping `example.com`.
 
 ## Enter Gumbo.jl
 
