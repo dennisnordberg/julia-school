@@ -1,6 +1,6 @@
 ---
 title: Scraping web pages with Julia and the HTTP and Gumbo packages
-date: 2022-05-14 14:35:32+11:00
+date: 2022-05-17 12:35:32+11:00
 seoTitle: "Scraping web pages with Julia HTTP & Gumbo: Tutorial"
 description: Julia can be used for fast web scraping, not just data analysis.
 authors: ["Ron Erdos"]
@@ -24,14 +24,31 @@ If you want **more complex websites to scrape legally**, try `toscrape.com`, whi
 
 </aside>
 
-## Introducing two Julia web scraping packages: HTTP.jl and Gumbo.jl
+## Introducing three Julia web scraping packages: HTTP.jl, Gumbo.jl and AbstractTrees.jl
 
-We're going to use two packages. Here's what they each do:
+We're going to use three packages. Here's what they each do:
 
-- `HTTP.jl`: Scrapes web pages
-- `Gumbo.jl`: Parses these web pages after we've scraped them with `HTTP.jl`, so that we can more easily retrieve specific elements (such as an `<h1>` heading).
+### `HTTP.jl`
 
-There is a third Julia package named `Cascadia.jl` which allows you to scrape HTML elements by CSS class or id, but that's out of scope for this article (for now).
+Scrapes web pages
+
+### `Gumbo.jl`
+
+Parses these web pages after we've scraped them with `HTTP.jl`, so that we can more easily retrieve specific HTML elements (such as an `<h1>` heading).
+
+### `AbstractTrees.jl`
+
+Allows us to extract specific HTML elements (again, such as an `<h1>` heading) by name, rather than position.
+
+Without `AbstractTrees.jl`, as far as I know, you'll only be able to receive specific HTML elements by their position in the source code.
+
+For example, you'd need to know that the `<h1>` heading is, say, the 17th element in the source code. Of course, if you are scraping multiple websites, or even multiple page types from the same websites, this won't always be true, and your scrape won't work.
+
+<aside>
+
+There is another Julia package named `Cascadia.jl` which allows you to scrape HTML elements by CSS class or id, but that's out of scope for this article (for now).
+
+</aside>
 
 ### Downloading and installing the packages
 
@@ -55,7 +72,7 @@ The three letters above stand for "package". We're now in Julia's package manage
 
 We can now easily add the three web scraping and parsing packages we need, using the `add` command:
 
-`add HTTP Gumbo`
+`add HTTP Gumbo AbstractTrees`
 
 Note that we separate the package names with spaces, rather than commas.
 
@@ -69,13 +86,13 @@ Once the packages have been installed, you can exit out of Julia's package manag
 
 Before we do any actual web scraping, we need to tell Julia we intend to use all three of our newly installed packages:
 
-`using HTTP, Gumbo`
+`using HTTP, Gumbo, AbstractTrees`
 
 Unlike when we `add`ed the packages, we need to use commas to separate the package names in a `using` command.
 
 ## Scraping example.com
 
-We're going to scrape the homepage of `example.com` in this tutorial.
+Now that we're all set up, let's get to work scraping the homepage of `example.com`.
 
 We'll store it in a new variable we'll create, and we'll call this variable `r` (for "request", as in "HTTP request").
 
@@ -388,6 +405,62 @@ Well, if we enter this command:
 `"Example Domain"`
 
 Booyah!
+
+## Scraping a given HTML element by name in Julia using the AbstractTrees package
+
+Okay, so the code in the previous section is all well and good if you're scraping a particular page type---such as your company's blog posts---where the template is fixed and thus the order of the HTML elements doesn't change.
+
+But what if you want to scrape multiple websites, or even multiple page types on the same website? When the `<h1>` heading is, say, element number 17 on one page, and, say, element number 23 on another page, using its position isn't scalable.
+
+Instead, let's scrape our desired HTML element(s) by name.
+
+And let's scrape the page `<title>` this time, instead of the `<h1>` element.
+
+Below is the complete code to scrape the page `<title>` element from example.com.
+
+```
+using HTTP, Gumbo, AbstractTrees
+
+r = HTTP.get("https://example.com/")
+r_parsed = parsehtml(String(r.body))
+root = r_parsed.root
+
+for elem in PreOrderDFS(root)
+    try
+        if tag(elem) == :title
+            println(AbstractTrees.children(elem)[1])
+        end
+    catch
+        # Nothing needed here
+    end
+end
+```
+
+Running that code, we get:
+
+`Example Domain`
+
+... which, if you look at `example.com`, is the text in the page `<title>`. Boom!
+
+Let's walk through that code so we have it straight:
+
+> `using HTTP, Gumbo, AbstractTrees` We're using the two packages (`HTTP` and `Gumbo`) we covered earlier in this tutorial. We're _also_ using a package we haven't yet used in this tutorial: `AbstractTrees`. It's this package that will let us scrape by the name of the HTML element, rather than its position.
+
+> `r = HTTP.get("https://example.com/")` We used this exact line of code earlier in the tutorial. It uses the `HTTP` package to scrape `https://example.com/`, but we'll need to do more to get it into a usable form. Let's keep going ...
+
+> `r_parsed = parsehtml(String(r.body))` We also used this exact line earlier in the tutorial. Here we're using the `parsehtml()` function from the `Gumbo` package to make our scraped HTML more usable.
+
+> `root = r_parsed.root` We haven't used this line before in this tutorial. Here we're creating a variable, `root`, which contains, both the `<head>` and `<body>` sections from `example.com`.
+
+> `for elem in PreOrderDFS(root)` Here we start a "for" loop. We'll be iterating over each element (`elem`) in our `root` variable. We've wrapped root inside a function from the `AbstractTrees` package named `PreOrderDFS()`, which appears to be necessary to allow us to extract HTML elements by name.
+
+> `try` Here we start a "try / catch" block. We need this because different HTML elements have different structures, and our code only handles one type. If we didn't have the "try / catch" block, our code would eventually throw an exception and fail.
+
+> `if tag(elem) == :title` Here we're telling our code we only want the page `<title>` element. Both the `tag()` function and the `:title` symbol [are from Gumbo and/or AbstractTrees](https://github.com/JuliaWeb/Gumbo.jl).
+
+> `println(AbstractTrees.children(elem)[1])` With the `println()` function, we are telling Julia to print to the terminal the actual text in the page `<title>` of the `example.com` homepage. Of course, you don't have to print the page `<title>` to the terminal, you can write it to a dataframe, a CSV or a text file.
+
+> The rest of the code just closes all the loops; a necessary task.
 
 ## Getting just the status code of web pages
 
