@@ -1,11 +1,11 @@
 ---
 title: How to convert nested JSON to a dataframe or CSV in Julia
-date: 2021-07-21 16:27:59+11:00
+date: 2022-09-08 13:23:42+11:00
 seoTitle: "Nested JSON in Julia: How to convert to dataframe"
 description: You can't do it with one function, but you can do it!
 authors: ["Ron Erdos"]
 tableOfContents: true
-version: 1.6.2
+version: 1.8.0
 ---
 
 ## Inputs and outputs
@@ -76,7 +76,7 @@ spacex = """
 
 So what are we working with here? What sort of variable is `spacex`?
 
-Let's check:
+Let's check using Julia's built-in `typeof()` function:
 
 `typeof(spacex)`
 
@@ -84,7 +84,7 @@ We get:
 
 `String`
 
-Okay, `spacex` is a `String`. Now we need to turn it into structured data so we can use it.
+Okay, `spacex` is a `String`. Now we need to turn it into structured data so we can use it to make our table.
 
 Enter the `JSON.jl` package.
 
@@ -195,7 +195,7 @@ We now need to tell Julia we want to use the DataFrames package:
 
 `using DataFrames`
 
-Now we can actually create a dataframe from our data. I'm going to use the conventional `df` as our variable name, but you can choose any variable name you like. Here's my code:
+Now we can actually create a dataframe from our data. I'm going to use the conventional `df` (which stands for "data frame") as our variable name, but you can choose any variable name you like. Here's my code:
 
 `df = DataFrame(spacex_dict)`
 
@@ -233,7 +233,7 @@ Again, note the terminal output---in this case, the `equipment` column---has bee
 
 The above dataframe is _sort of_ what we want. The good news is that the non-nested JSON (the `id` and `org` columns) is appearing properly in distinct columns.
 
-However, the nested JSON---the `launcher` names and their `max_payload`s for low earth orbit---have not been separated into distinct columns, so the `equipment` column is a bit of a mess.
+However, the `equipment` column is a bit of a mess. This is because the nested JSON---the `launcher` names and their `max_payload`s for low earth orbit---have not been separated into distinct columns.
 
 We'll fix that next.
 
@@ -264,7 +264,7 @@ So the value of our newly-created `equipment_col` variable is:
 
 (Remember you can scroll horizontally in the code block above.)
 
-Before we go on, let's recall our desired end result. We want a dataframe or CSV that looks like this:
+Before we go on, let's recall our desired end result. We want a dataframe and/or CSV that looks like this:
 
 | org    | id  | launcher     | max_payload |
 |--------|-----|--------------|-------------|
@@ -303,7 +303,7 @@ Before we go on, let's cover how to drill down to get specific data out of a Jul
 
 In our `equipment` column, we have a dictionary in each row.
 
-In the first row, we have:
+For example, in the first row, we have:
 
 `Dict{String, Any}("max_payload" => 180, "launcher" => "Falcon 1")`
 
@@ -325,10 +325,10 @@ We're going to use this approach to get the values of *all* the launcher names, 
 
 </aside>
 
-The code looks like this:
+Time to put this into action. The code looks like this:
 
 ```
-for i in 1:length(equipment_col)
+for i in eachindex(equipment_col)
     push!(launchers_array, equipment_col[i]["launcher"])
     push!(max_payloads_array, equipment_col[i]["max_payload"])
 end
@@ -336,7 +336,7 @@ end
 
 Let's walk through that code line by line:
 
-> `for i in 1:length(equipment_col)`
+> `for i in eachindex(equipment_col)`
 >
 > Here we are iterating over the number of items in our equipment column. In our SpaceX example, we have three rows (one each for Falcon 1, Falcon 9, and Falcon Heavy). So in our iterator, `i` will equal `1`, then `2`, and finally `3`. We'll use this changing value of `i` below to get our launcher names and their max payloads.
 
@@ -355,30 +355,32 @@ Let's walk through that code line by line:
 Let's take a look at our new `launchers_array`:
 
 ```
-3-element Vector{Int64}:
-   180
- 22800
- 63800
+3-element Vector{String}:
+ "Falcon 1"
+ "Falcon 9"
+ "Falcon Heavy"
  ```
 
  And our new `max_payloads_array`:
 
  ```
- 3-element Vector{String}:
- "Falcon 1"
- "Falcon 9"
- "Falcon Heavy"
+ 3-element Vector{Int64}:
+   180
+ 22800
+ 63800
  ```
- 
+
  Great, everything's in order.
 
- Now we can add them to our dataframe:
+ Now we can add them to our dataframe.
+
+ Let's add the `launcher` column first:
 
  `df[!, :launcher] = launchers_array`
 
- `df[!, :max_payload] = max_payloads_array`
+ ... and our `max_payload` column second:
 
- The two lines of code above add the `launchers_array` and the `max_payloads_array` respectively as columns to our dataframe.
+ `df[!, :max_payload] = max_payloads_array`
 
  Let's take a look so far:
 
@@ -402,7 +404,7 @@ At this point, we no longer need the unstructured `equipment` column---we have r
 
 `select!(df, Not(:equipment))`
 
-The above code says "select all columns from our `df` dataframe but `Not` the column named `equipment`". Or in plain English: delete the column named `equipment` from our dataframe.
+The above code says "select all columns from our `df` dataframe but `Not` the column named `equipment`, and assign the result to the value of `df`". Or in plain English: delete the column named `equipment` from our dataframe.
 
 We get our fully-structured dataframe:
 
